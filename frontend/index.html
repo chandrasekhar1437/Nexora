@@ -3,193 +3,309 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nexora — Scalable Cloud & Software Engineering</title>
+  <title>Nexora — Premium Engineering & Digital Agency</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
     .glass-panel {
-      background: rgba(15, 23, 42, 0.65);
+      background: rgba(15, 23, 42, 0.85);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
     .glass-card {
-      background: rgba(255, 255, 255, 0.02);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
     }
-    .hero-glow {
-      background: radial-gradient(circle 600px at 50% 20%, rgba(6, 182, 212, 0.15), transparent 70%);
+    .hero-gradient {
+      background: radial-gradient(circle 500px at 50% 10%, rgba(6, 182, 212, 0.15), transparent 70%);
+    }
+    /* Mobile Drawer slide animation */
+    #mobile-drawer {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #mobile-drawer.closed {
+      transform: translateX(100%);
+    }
+    #mobile-drawer.open {
+      transform: translateX(0);
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-cyan-500 selection:text-slate-950">
+<body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-cyan-500 selection:text-slate-950 overflow-x-hidden">
 
-  <!-- Responsive Navigation -->
-  <nav class="sticky top-0 z-50 glass-panel border-b border-slate-800/80 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16 sm:h-20">
+  <!-- Main Navbar -->
+  <nav class="sticky top-0 z-40 glass-panel border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8">
+      <div class="flex items-center justify-between h-18 py-4">
         
-        <!-- Logo -->
-        <a href="#" class="flex items-center gap-2">
-          <span class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-black text-slate-950 text-base shadow-lg shadow-cyan-500/20">N</span>
-          <span class="text-xl sm:text-2xl font-black tracking-wider text-white">NEXORA</span>
+        <!-- Brand Logo -->
+        <a href="#" class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-black text-slate-950 text-lg shadow-lg shadow-cyan-500/25">
+            N
+          </div>
+          <span class="text-2xl font-black tracking-wider text-white">NEXORA</span>
         </a>
 
-        <!-- Desktop Nav Links -->
-        <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-300">
           <a href="#services" class="hover:text-cyan-400 transition">Services</a>
+          <a href="#portfolio" class="hover:text-cyan-400 transition">Portfolio</a>
           <a href="#process" class="hover:text-cyan-400 transition">Workflow</a>
-          <a href="#estimator" class="hover:text-cyan-400 transition">Estimator</a>
-          <a href="#contact" class="px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold transition">Consult Us</a>
+          <a href="#estimator" class="hover:text-cyan-400 transition">Cost Estimator</a>
+          <a href="#contact" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition shadow-lg shadow-emerald-500/20">
+            Get Proposal
+          </a>
         </div>
 
-        <!-- Mobile Menu Toggle Button -->
+        <!-- Mobile Hamburger Button -->
         <div class="md:hidden flex items-center">
-          <button id="mobile-toggle" aria-label="Toggle Navigation" class="text-slate-300 hover:text-white p-2 rounded-lg focus:outline-none">
-            <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button id="open-menu-btn" aria-label="Open Menu" class="p-2 text-slate-300 hover:text-white rounded-lg focus:outline-none">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-            <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
       </div>
     </div>
-
-    <!-- Mobile Dropdown Menu -->
-    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-800 px-4 pt-3 pb-6 space-y-3 bg-slate-950/95">
-      <a href="#services" class="mobile-nav-link block px-3 py-2 rounded-md text-base text-slate-300 hover:text-white hover:bg-slate-900">Services</a>
-      <a href="#process" class="mobile-nav-link block px-3 py-2 rounded-md text-base text-slate-300 hover:text-white hover:bg-slate-900">Workflow</a>
-      <a href="#estimator" class="mobile-nav-link block px-3 py-2 rounded-md text-base text-slate-300 hover:text-white hover:bg-slate-900">Cost Estimator</a>
-      <a href="#contact" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-semibold text-cyan-400 bg-cyan-950/40 border border-cyan-800/50 text-center">Consult Us</a>
-    </div>
   </nav>
 
-  <!-- Hero Section -->
-  <header class="relative pt-20 pb-16 md:pt-32 md:pb-24 px-4 hero-glow overflow-hidden">
-    <div class="max-w-4xl mx-auto text-center">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/70 border border-cyan-500/30 text-cyan-300 text-xs sm:text-sm font-medium mb-6">
-        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-        Enterprise Cloud & Full-Stack Solutions
+  <!-- Fullscreen Mobile Drawer (Reference: Nuvrotech style) -->
+  <div id="mobile-drawer" class="fixed inset-0 z-50 bg-slate-950/98 closed md:hidden flex flex-col justify-between p-6">
+    <div>
+      <!-- Drawer Top Bar -->
+      <div class="flex items-center justify-between border-b border-slate-800 pb-5">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-black text-slate-950 text-base">
+            N
+          </div>
+          <span class="text-xl font-extrabold text-white">NEXORA</span>
+        </div>
+        <button id="close-menu-btn" aria-label="Close Menu" class="p-2 text-slate-400 hover:text-white rounded-lg">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
       </div>
-      <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight sm:leading-tight">
-        Architecting Systems That <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Outpace Complexity.</span>
+
+      <!-- Drawer Links -->
+      <div class="mt-8 space-y-5 text-lg font-semibold text-slate-200">
+        <a href="#" class="drawer-link block hover:text-cyan-400 py-1 transition">Home</a>
+        <a href="#services" class="drawer-link block hover:text-cyan-400 py-1 transition">Services</a>
+        <a href="#portfolio" class="drawer-link block hover:text-cyan-400 py-1 transition">Portfolio</a>
+        <a href="#process" class="drawer-link block hover:text-cyan-400 py-1 transition">Workflow</a>
+        <a href="#estimator" class="drawer-link block hover:text-cyan-400 py-1 transition">Pricing & Estimator</a>
+        <a href="#contact" class="drawer-link block hover:text-cyan-400 py-1 transition">Contact</a>
+      </div>
+    </div>
+
+    <!-- Drawer Footer CTA -->
+    <div class="pt-6 border-t border-slate-800/80">
+      <a href="#contact" class="drawer-link block w-full py-4 text-center rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-base shadow-lg shadow-emerald-900/40">
+        Get Proposal
+      </a>
+      <p class="text-center text-xs text-slate-500 mt-4">support@nexora.internal • ISO 27001 Ready</p>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <header class="relative pt-16 pb-14 md:pt-28 md:pb-24 px-5 hero-gradient text-center">
+    <div class="max-w-4xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-xs font-semibold mb-6">
+        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+        Next-Gen Software Architecture & Cloud Labs
+      </div>
+      <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight">
+        Build Systems That <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-emerald-400">Scale Without Limits.</span>
       </h1>
       <p class="text-slate-400 mt-6 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-        Nexora engineers custom software platforms, cloud modernization architectures, and high-load web systems designed for operational resilience.
+        High-performance web architecture, bespoke ERP & SaaS engines, and cloud-native solutions engineered for real-world growth.
       </p>
       
-      <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="#estimator" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition shadow-lg shadow-cyan-500/20 text-center">
+      <div class="mt-8 flex flex-col sm:flex-row gap-3.5 justify-center max-w-md mx-auto sm:max-w-none">
+        <a href="#estimator" class="px-7 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition text-center shadow-lg shadow-emerald-500/20">
           Calculate Project Cost
         </a>
-        <a href="#contact" class="w-full sm:w-auto px-6 py-3.5 rounded-xl glass-card hover:bg-slate-900 text-slate-200 border border-slate-700 font-semibold text-sm transition text-center">
-          Request Architecture Review
+        <a href="#portfolio" class="px-7 py-4 rounded-xl glass-card hover:bg-slate-900 text-slate-200 border border-slate-700 font-semibold text-sm transition text-center">
+          Explore Case Studies
         </a>
       </div>
     </div>
   </header>
 
-  <!-- Key Metrics / Trust Signals -->
-  <section class="border-y border-slate-800/70 py-10 bg-slate-950/50">
-    <div class="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+  <!-- Metrics Bar -->
+  <section class="border-y border-slate-800/80 py-8 bg-slate-900/40">
+    <div class="max-w-6xl mx-auto px-5 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
       <div>
-        <p class="text-2xl sm:text-4xl font-extrabold text-cyan-400">99.98%</p>
-        <p class="text-xs sm:text-sm text-slate-400 mt-1 uppercase tracking-wider">System Reliability</p>
+        <p class="text-3xl sm:text-4xl font-extrabold text-cyan-400">50+</p>
+        <p class="text-xs text-slate-400 uppercase tracking-wider mt-1">Completed Launches</p>
       </div>
       <div>
-        <p class="text-2xl sm:text-4xl font-extrabold text-white">40+ Projects</p>
-        <p class="text-xs sm:text-sm text-slate-400 mt-1 uppercase tracking-wider">Delivered On Spec</p>
+        <p class="text-3xl sm:text-4xl font-extrabold text-white">99.9%</p>
+        <p class="text-xs text-slate-400 uppercase tracking-wider mt-1">Uptime SLA</p>
       </div>
       <div>
-        <p class="text-2xl sm:text-4xl font-extrabold text-cyan-400">&lt; 150ms</p>
-        <p class="text-xs sm:text-sm text-slate-400 mt-1 uppercase tracking-wider">Target API Latency</p>
+        <p class="text-3xl sm:text-4xl font-extrabold text-emerald-400">3.5x</p>
+        <p class="text-xs text-slate-400 uppercase tracking-wider mt-1">Avg ROI Multiplier</p>
       </div>
       <div>
-        <p class="text-2xl sm:text-4xl font-extrabold text-white">24/7</p>
-        <p class="text-xs sm:text-sm text-slate-400 mt-1 uppercase tracking-wider">Deployment Monitoring</p>
+        <p class="text-3xl sm:text-4xl font-extrabold text-white">24/7</p>
+        <p class="text-xs text-slate-400 uppercase tracking-wider mt-1">Ops & Monitoring</p>
       </div>
+    </div>
+  </section>
+
+  <!-- Interactive Filterable Portfolio Section -->
+  <section id="portfolio" class="py-20 px-5 max-w-7xl mx-auto">
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <span class="text-cyan-400 font-bold text-xs uppercase tracking-widest">Selected Work</span>
+      <h2 class="text-3xl sm:text-4xl font-black text-white mt-2">Enterprise Case Studies</h2>
+      <p class="text-slate-400 text-sm mt-2">High-impact platforms built with modern scalable stacks.</p>
+    </div>
+
+    <!-- Filter Buttons (Like Nuvrotech) -->
+    <div class="flex flex-wrap items-center justify-center gap-2 mb-10">
+      <button class="portfolio-filter px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-cyan-500 text-slate-950 transition" data-filter="all">All</button>
+      <button class="portfolio-filter px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 transition" data-filter="web">Web Apps</button>
+      <button class="portfolio-filter px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 transition" data-filter="erp">ERP / CRM</button>
+      <button class="portfolio-filter px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 transition" data-filter="saas">SaaS Systems</button>
+    </div>
+
+    <!-- Project Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+      <!-- Card 1 -->
+      <div class="portfolio-item glass-card rounded-2xl overflow-hidden border border-slate-800 flex flex-col" data-category="erp">
+        <div class="h-48 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80');">
+          <div class="w-full h-full bg-slate-950/40 p-4 flex items-start justify-between">
+            <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-950/80 text-cyan-400 border border-slate-700">ERP / CRM</span>
+          </div>
+        </div>
+        <div class="p-6 flex-1 flex flex-col justify-between">
+          <div>
+            <h3 class="text-xl font-bold text-white mb-2">OmniFlow Real Estate CRM</h3>
+            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">Centralized inventory management and lead conversion portal with multi-agent commission tracking.</p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs">
+            <span class="text-emerald-400 font-semibold">+40% Lead Velocity</span>
+            <span class="text-slate-500">FastAPI + Vue</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="portfolio-item glass-card rounded-2xl overflow-hidden border border-slate-800 flex flex-col" data-category="saas">
+        <div class="h-48 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80');">
+          <div class="w-full h-full bg-slate-950/40 p-4 flex items-start justify-between">
+            <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-950/80 text-purple-400 border border-slate-700">SaaS</span>
+          </div>
+        </div>
+        <div class="p-6 flex-1 flex flex-col justify-between">
+          <div>
+            <h3 class="text-xl font-bold text-white mb-2">Vanguard Cloud Analytics</h3>
+            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">Multi-tenant telemetry visualization platform capable of processing 10k telemetry events per second.</p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs">
+            <span class="text-cyan-400 font-semibold">&lt; 120ms Query Speed</span>
+            <span class="text-slate-500">Python + TimescaleDB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="portfolio-item glass-card rounded-2xl overflow-hidden border border-slate-800 flex flex-col" data-category="web">
+        <div class="h-48 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80');">
+          <div class="w-full h-full bg-slate-950/40 p-4 flex items-start justify-between">
+            <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-950/80 text-emerald-400 border border-slate-700">Web App</span>
+          </div>
+        </div>
+        <div class="p-6 flex-1 flex flex-col justify-between">
+          <div>
+            <h3 class="text-xl font-bold text-white mb-2">PrimeSupply B2B Commerce</h3>
+            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">Custom checkout pipeline with localized currency settling, tax engines, and automated invoice delivery.</p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs">
+            <span class="text-emerald-400 font-semibold">99.99% Checkout Uptime</span>
+            <span class="text-slate-500">FastAPI + Stripe</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
   <!-- Dynamic Services Catalog -->
-  <section id="services" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-    <div class="text-center max-w-2xl mx-auto mb-14">
-      <span class="text-cyan-400 font-semibold text-xs tracking-widest uppercase">Service Capabilities</span>
-      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2">End-to-End Technical Delivery</h2>
+  <section id="services" class="py-16 px-5 max-w-7xl mx-auto border-t border-slate-900">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <span class="text-cyan-400 font-bold text-xs uppercase tracking-widest">Capabilities</span>
+      <h2 class="text-3xl sm:text-4xl font-black text-white mt-2">Specialized Engineering Services</h2>
     </div>
-    
+
     <div id="services-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <div class="glass-card p-6 rounded-2xl animate-pulse text-center col-span-full">
-        <p class="text-slate-500 text-sm">Syncing service definitions from Render backend...</p>
+        <p class="text-slate-500 text-sm">Connecting to Nexora backend services...</p>
       </div>
     </div>
   </section>
 
-  <!-- Process Workflow Section -->
-  <section id="process" class="py-20 px-4 max-w-6xl mx-auto border-t border-slate-900">
-    <div class="text-center max-w-2xl mx-auto mb-16">
-      <span class="text-cyan-400 font-semibold text-xs tracking-widest uppercase">Methodology</span>
-      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2">How We Build For Production</h2>
+  <!-- Process Workflow -->
+  <section id="process" class="py-16 px-5 max-w-6xl mx-auto border-t border-slate-900">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <span class="text-cyan-400 font-bold text-xs uppercase tracking-widest">Execution Path</span>
+      <h2 class="text-3xl sm:text-4xl font-black text-white mt-2">From Architecture to Production</h2>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="glass-card p-6 rounded-xl border-slate-800">
-        <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">STAGE 01</span>
-        <h3 class="text-lg font-bold text-white mt-4">Discovery & Audit</h3>
-        <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">Deconstruct requirements, system constraints, API dependencies, and security vectors.</p>
+      <div class="glass-card p-6 rounded-2xl">
+        <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">01. AUDIT</span>
+        <h3 class="text-lg font-bold text-white mt-4">Discovery</h3>
+        <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">System topology audit, database schema mapping, and business logic verification.</p>
       </div>
-
-      <div class="glass-card p-6 rounded-xl border-slate-800">
-        <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">STAGE 02</span>
-        <h3 class="text-lg font-bold text-white mt-4">Architecture & Schema</h3>
-        <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">Establish database models, auth layers, CI/CD pipeline definitions, and cloud boundaries.</p>
+      <div class="glass-card p-6 rounded-2xl">
+        <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">02. DESIGN</span>
+        <h3 class="text-lg font-bold text-white mt-4">Architecture</h3>
+        <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">Microservice boundaries, asynchronous event queues, and zero-trust authentication design.</p>
       </div>
-
-      <div class="glass-card p-6 rounded-xl border-slate-800">
-        <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">STAGE 03</span>
-        <h3 class="text-lg font-bold text-white mt-4">Sprint Execution</h3>
-        <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">Iterative test-driven code delivery with bi-weekly client demo environments.</p>
+      <div class="glass-card p-6 rounded-2xl">
+        <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">03. SPRINT</span>
+        <h3 class="text-lg font-bold text-white mt-4">Development</h3>
+        <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">High-velocity test-driven delivery with automated CI/CD staging environments.</p>
       </div>
-
-      <div class="glass-card p-6 rounded-xl border-slate-800">
-        <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">STAGE 04</span>
-        <h3 class="text-lg font-bold text-white mt-4">Deployment & Ops</h3>
-        <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">Production cutover, automated backup scheduling, telemetry setup, and team handover.</p>
+      <div class="glass-card p-6 rounded-2xl">
+        <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">04. LAUNCH</span>
+        <h3 class="text-lg font-bold text-white mt-4">Scale & Monitor</h3>
+        <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">Zero-downtime cutover, APM tracing, database backups, and client engineering handoff.</p>
       </div>
     </div>
   </section>
 
-  <!-- Interactive Project Cost Estimator -->
-  <section id="estimator" class="py-20 px-4 max-w-4xl mx-auto">
+  <!-- Interactive Estimator -->
+  <section id="estimator" class="py-16 px-5 max-w-4xl mx-auto">
     <div class="glass-panel p-6 sm:p-10 rounded-3xl border border-slate-800 shadow-2xl">
       <div class="max-w-xl">
-        <span class="text-cyan-400 font-semibold text-xs tracking-widest uppercase">Instant Budgeting</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Project Scope Estimator</h2>
-        <p class="text-slate-400 text-xs sm:text-sm mt-2">Receive automated delivery and budget estimates calculated directly through FastAPI backend algorithms.</p>
+        <span class="text-emerald-400 font-bold text-xs uppercase tracking-widest">Instant Calculator</span>
+        <h2 class="text-2xl sm:text-3xl font-black text-white mt-1">Scope & Pricing Estimator</h2>
+        <p class="text-slate-400 text-xs sm:text-sm mt-2">Get quick estimates calculated via FastAPI algorithms.</p>
       </div>
 
       <form id="estimator-form" class="mt-8 space-y-6">
         <div>
-          <label class="block text-xs uppercase tracking-wider text-slate-300 mb-2 font-semibold">Architecture / Platform Type</label>
+          <label class="block text-xs uppercase tracking-wider text-slate-300 mb-2 font-semibold">Solution Architecture</label>
           <select id="project-type" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-3.5 text-sm focus:border-cyan-400 text-white outline-none">
-            <option value="Web App">Web Application (FastAPI / SPA)</option>
-            <option value="Mobile App">Mobile Application</option>
-            <option value="Enterprise Architecture">Enterprise System (Microservices & ERP)</option>
+            <option value="Web App">Web Application (FastAPI / Dynamic SPA)</option>
+            <option value="Mobile App">Cross-Platform Mobile App</option>
+            <option value="Enterprise Architecture">Enterprise ERP / CRM Platform</option>
           </select>
         </div>
 
         <div>
           <div class="flex justify-between items-center mb-2">
-            <label class="text-xs uppercase tracking-wider text-slate-300 font-semibold">Scope (Pages / Micro-Views)</label>
-            <span id="pages-display" class="text-cyan-400 font-bold text-sm bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">5</span>
+            <label class="text-xs uppercase tracking-wider text-slate-300 font-semibold">Scale (Views / Modules)</label>
+            <span id="pages-display" class="text-cyan-400 font-bold text-sm bg-slate-900 px-3 py-1 rounded-lg border border-slate-800">5</span>
           </div>
           <input type="range" id="pages-count" min="1" max="25" value="5" class="w-full accent-cyan-400 cursor-pointer" />
         </div>
@@ -197,69 +313,70 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-slate-300">
           <label class="flex items-center gap-3 p-3.5 rounded-xl border border-slate-800 hover:bg-slate-900/50 cursor-pointer transition">
             <input type="checkbox" id="auth-needed" class="w-4 h-4 accent-cyan-400" checked />
-            <span class="text-xs font-medium">Role-Based Auth (JWT / OAuth)</span>
+            <span class="text-xs font-medium">Enterprise Auth & Role Security</span>
           </label>
           <label class="flex items-center gap-3 p-3.5 rounded-xl border border-slate-800 hover:bg-slate-900/50 cursor-pointer transition">
             <input type="checkbox" id="payment-needed" class="w-4 h-4 accent-cyan-400" />
-            <span class="text-xs font-medium">Payment Integration</span>
+            <span class="text-xs font-medium">Payment & Billing Gateway</span>
           </label>
         </div>
 
         <button type="submit" class="w-full py-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">
-          Calculate Live Estimate
+          Calculate Scope Estimate
         </button>
       </form>
 
       <div id="estimate-result" class="hidden mt-8 p-6 rounded-2xl bg-cyan-950/30 border border-cyan-500/30 flex flex-col sm:flex-row justify-between items-center gap-4">
         <div>
-          <p class="text-xs uppercase tracking-wider text-slate-400">Estimated Cost Range</p>
+          <p class="text-xs uppercase tracking-wider text-slate-400">Budget Guidance</p>
           <p id="cost-value" class="text-2xl sm:text-3xl font-black text-cyan-400 mt-1"></p>
         </div>
         <div class="sm:text-right">
-          <p class="text-xs uppercase tracking-wider text-slate-400">Delivery Velocity</p>
+          <p class="text-xs uppercase tracking-wider text-slate-400">Estimated Timeline</p>
           <p id="timeline-value" class="text-xl font-bold text-white mt-1"></p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Contact Section -->
-  <section id="contact" class="py-20 px-4 max-w-4xl mx-auto">
+  <!-- Contact Proposal Form -->
+  <section id="contact" class="py-16 px-5 max-w-4xl mx-auto">
     <div class="glass-panel p-6 sm:p-10 rounded-3xl border border-slate-800 shadow-2xl">
       <div class="max-w-xl">
-        <span class="text-cyan-400 font-semibold text-xs tracking-widest uppercase">Start an Engagement</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Direct Engineering Contact</h2>
-        <p class="text-slate-400 text-xs sm:text-sm mt-2">Inquiries are logged directly to the admin lead table.</p>
+        <span class="text-emerald-400 font-bold text-xs uppercase tracking-widest">Get Proposal</span>
+        <h2 class="text-2xl sm:text-3xl font-black text-white mt-1">Start a Conversation</h2>
+        <p class="text-slate-400 text-xs sm:text-sm mt-2">Submit your project details to log your ticket in the internal dashboard.</p>
       </div>
 
       <form id="contact-form" class="mt-8 space-y-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Your Full Name</label>
-            <input type="text" id="contact-name" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-sm focus:border-cyan-400 text-white outline-none" placeholder="e.g. Anand Varma" />
+            <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Name</label>
+            <input type="text" id="contact-name" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-sm focus:border-cyan-400 text-white outline-none" placeholder="Your Name" />
           </div>
           <div>
-            <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Work Email</label>
+            <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Corporate Email</label>
             <input type="email" id="contact-email" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-sm focus:border-cyan-400 text-white outline-none" placeholder="name@company.com" />
           </div>
         </div>
 
         <div>
-          <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Required Practice Area</label>
+          <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Service Required</label>
           <select id="contact-service" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-sm focus:border-cyan-400 text-white outline-none">
             <option value="Full-Stack Web Development">Full-Stack Web Development</option>
+            <option value="ERP / CRM Solutions">ERP / CRM Solutions</option>
+            <option value="SaaS Architecture">SaaS Architecture</option>
             <option value="Cloud & DevOps Architecture">Cloud & DevOps Architecture</option>
-            <option value="Corporate IT Training">Corporate IT Training</option>
           </select>
         </div>
 
         <div>
-          <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Scope Details</label>
-          <textarea id="contact-message" rows="4" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-sm focus:border-cyan-400 text-white outline-none" placeholder="Describe the problem statement or architectural requirements..."></textarea>
+          <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Requirements</label>
+          <textarea id="contact-message" rows="4" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-sm focus:border-cyan-400 text-white outline-none" placeholder="Brief overview of goals, timeline, and deliverables..."></textarea>
         </div>
 
-        <button type="submit" id="contact-submit-btn" class="w-full py-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">
-          Submit Engineering Inquiry
+        <button type="submit" id="contact-submit-btn" class="w-full py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition">
+          Submit Proposal Request
         </button>
       </form>
 
@@ -268,80 +385,115 @@
   </section>
 
   <!-- Footer -->
-  <footer class="py-10 border-t border-slate-900 bg-slate-950">
-    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-      <p>© 2026 Nexora Tech Solutions. High-Performance Digital Systems.</p>
+  <footer class="py-12 border-t border-slate-900 bg-slate-950 text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p>© 2026 Nexora Technologies. Next-Gen Enterprise Platforms.</p>
       <div class="flex space-x-6">
         <a href="#services" class="hover:text-cyan-400 transition">Services</a>
-        <a href="#process" class="hover:text-cyan-400 transition">Workflow</a>
+        <a href="#portfolio" class="hover:text-cyan-400 transition">Portfolio</a>
         <a href="#estimator" class="hover:text-cyan-400 transition">Estimator</a>
+        <a href="#contact" class="hover:text-cyan-400 transition">Get Proposal</a>
       </div>
     </div>
   </footer>
 
   <script>
-    // Unified API Base URL pointing to Render
     const API_BASE_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
       ? "http://127.0.0.1:8000"
       : "https://nexora-backend-4ijr.onrender.com";
 
-    // 1. Mobile Menu Toggle
-    const mobileBtn = document.getElementById('mobile-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const hamburgerIcon = document.getElementById('hamburger-icon');
-    const closeIcon = document.getElementById('close-icon');
+    // 1. Mobile Drawer Toggle
+    const openBtn = document.getElementById('open-menu-btn');
+    const closeBtn = document.getElementById('close-menu-btn');
+    const drawer = document.getElementById('mobile-drawer');
 
-    mobileBtn.addEventListener('click', () => {
-      const isHidden = mobileMenu.classList.toggle('hidden');
-      hamburgerIcon.classList.toggle('hidden', !isHidden);
-      closeIcon.classList.toggle('hidden', isHidden);
+    function openDrawer() {
+      drawer.classList.remove('closed');
+      drawer.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove('open');
+      drawer.classList.add('closed');
+      document.body.style.overflow = 'auto';
+    }
+
+    openBtn.addEventListener('click', openDrawer);
+    closeBtn.addEventListener('click', closeDrawer);
+
+    document.querySelectorAll('.drawer-link').forEach(link => {
+      link.addEventListener('click', closeDrawer);
     });
 
-    document.querySelectorAll('.mobile-nav-link').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.add('hidden');
-        hamburgerIcon.classList.remove('hidden');
-        closeIcon.classList.add('hidden');
+    // 2. Portfolio Category Filter
+    const filterButtons = document.querySelectorAll('.portfolio-filter');
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => {
+          b.classList.remove('bg-cyan-500', 'text-slate-950');
+          b.classList.add('bg-slate-900', 'text-slate-300');
+        });
+        btn.classList.add('bg-cyan-500', 'text-slate-950');
+        btn.classList.remove('bg-slate-900', 'text-slate-300');
+
+        const filter = btn.getAttribute('data-filter');
+        portfolioItems.forEach(item => {
+          if (filter === 'all' || item.getAttribute('data-category') === filter) {
+            item.style.display = 'flex';
+          } else {
+            item.style.display = 'none';
+          }
+        });
       });
     });
 
-    // 2. Fetch Dynamic Services
+    // 3. Dynamic Services Fetch (With local fallback)
+    const fallbackServices = [
+      { title: "Custom Web Applications", desc: "Production-ready platforms built with Python/FastAPI, modern microservices, and reactive frontends." },
+      { title: "ERP & CRM Implementations", desc: "Tailored enterprise solutions to automate core operations, inventory, and cross-team communications." },
+      { title: "SaaS Architecture & APIs", desc: "Multi-tenant platforms engineered with strict tenancy isolation, token auth, and billing integration." }
+    ];
+
     async function loadServices() {
+      const container = document.getElementById('services-container');
       try {
-        const res = await fetch(`${API_BASE_URL}/api/services`);
-        if (!res.ok) throw new Error("Service catalog unreachable");
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
+        const res = await fetch(`${API_BASE_URL}/api/services`, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        if (!res.ok) throw new Error("Fallback needed");
         const services = await res.json();
-        const container = document.getElementById('services-container');
-        
-        container.innerHTML = services.map(s => `
-          <div class="glass-card p-6 sm:p-8 rounded-2xl hover:border-cyan-500/40 transition group">
-            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-800/60 flex items-center justify-center text-cyan-400 mb-4 group-hover:scale-110 transition-transform">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-              </svg>
-            </div>
-            <h3 class="text-xl font-bold text-white mb-2">${s.title}</h3>
-            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">${s.desc}</p>
-          </div>
-        `).join('');
+        renderServices(services);
       } catch (err) {
-        console.error("Services fetch error:", err);
-        document.getElementById('services-container').innerHTML = `
-          <div class="p-6 rounded-xl border border-rose-900/50 bg-rose-950/20 text-rose-400 text-center col-span-full text-sm">
-            Failed to connect to backend catalog.
-          </div>
-        `;
+        renderServices(fallbackServices);
       }
     }
 
-    // 3. Slider Display
+    function renderServices(services) {
+      const container = document.getElementById('services-container');
+      container.innerHTML = services.map(s => `
+        <div class="glass-card p-6 rounded-2xl hover:border-cyan-500/50 transition">
+          <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-800/60 flex items-center justify-center text-cyan-400 mb-4">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">${s.title}</h3>
+          <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">${s.desc}</p>
+        </div>
+      `).join('');
+    }
+
+    // 4. Estimator
     const pagesInput = document.getElementById('pages-count');
     const pagesDisplay = document.getElementById('pages-display');
     pagesInput.addEventListener('input', (e) => {
       pagesDisplay.textContent = e.target.value;
     });
 
-    // 4. Estimator Handler
     document.getElementById('estimator-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const payload = {
@@ -366,13 +518,13 @@
       }
     });
 
-    // 5. Contact Form Handler
+    // 5. Contact Form
     document.getElementById('contact-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('contact-submit-btn');
       const alertBox = document.getElementById('contact-alert');
       btn.disabled = true;
-      btn.textContent = 'Transmitting Lead...';
+      btn.textContent = 'Transmitting Proposal...';
 
       const payload = {
         name: document.getElementById('contact-name').value,
@@ -388,20 +540,20 @@
           body: JSON.stringify(payload)
         });
         
-        if (!res.ok) throw new Error("Server submission error");
+        if (!res.ok) throw new Error("Submission error");
         const result = await res.json();
         
-        alertBox.className = 'mt-6 p-4 rounded-xl text-sm text-center bg-emerald-950/70 text-emerald-400 border border-emerald-600/40';
+        alertBox.className = 'mt-6 p-4 rounded-xl text-sm text-center bg-emerald-950/80 text-emerald-400 border border-emerald-600/40';
         alertBox.textContent = result.message;
         alertBox.classList.remove('hidden');
         document.getElementById('contact-form').reset();
       } catch (err) {
-        alertBox.className = 'mt-6 p-4 rounded-xl text-sm text-center bg-rose-950/70 text-rose-400 border border-rose-600/40';
-        alertBox.textContent = 'Submission failure. Backend may be spinning up; please retry shortly.';
+        alertBox.className = 'mt-6 p-4 rounded-xl text-sm text-center bg-rose-950/80 text-rose-400 border border-rose-600/40';
+        alertBox.textContent = 'Backend is warming up. Please wait 10 seconds and submit again.';
         alertBox.classList.remove('hidden');
       } finally {
         btn.disabled = false;
-        btn.textContent = 'Submit Engineering Inquiry';
+        btn.textContent = 'Submit Proposal Request';
       }
     });
 
