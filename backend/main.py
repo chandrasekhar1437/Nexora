@@ -1,32 +1,34 @@
+import os
 import datetime
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from typing import Optional
+from typing import Optional, List
 
 from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Query, Security, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import APIKeyHeader
 from pydantic import BaseModel, EmailStr
 from sqlalchemy import Column, DateTime, Integer, String, Text, create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 # --- Configuration & Security ---
-ADMIN_SECRET_KEY = "nexora_admin_secret_2026"
+ADMIN_SECRET_KEY = os.getenv("ADMIN_SECRET_KEY", "nexora_admin_secret_2026")
 api_key_header = APIKeyHeader(name="X-Admin-Key", auto_error=False)
 
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 587
-SENDER_EMAIL = "your-email@gmail.com"
-SENDER_PASSWORD = "your-app-password"  # Google App Password
-ADMIN_NOTIFICATION_RECEIVER = "your-email@gmail.com"
+SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
+SENDER_EMAIL = os.getenv("SENDER_EMAIL", "your-email@gmail.com")
+SENDER_PASSWORD = os.getenv("SENDER_PASSWORD", "your-app-password")
+ADMIN_NOTIFICATION_RECEIVER = os.getenv("ADMIN_NOTIFICATION_RECEIVER", "your-email@gmail.com")
 
 # --- Database Setup (SQLite) ---
 DATABASE_URL = "sqlite:///./nexora.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+
+class Base(DeclarativeBase):
+    pass
 
 class ContactLead(Base):
     __tablename__ = "contact_leads"
@@ -37,7 +39,7 @@ class ContactLead(Base):
     service_interested = Column(String(100), nullable=False)
     message = Column(Text, nullable=False)
     status = Column(String(50), default="New")  # New, Contacted, In Progress, Closed
-    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.datetime.now(datetime.timezone.utc))
 
 Base.metadata.create_all(bind=engine)
 
@@ -47,6 +49,18 @@ class ContactMessage(BaseModel):
     email: EmailStr
     service_interested: str
     message: str
+
+class LeadResponse(BaseModel):
+    id: int
+    name: str
+    email: str
+    service_interested: str
+    message: str
+    status: str
+    created_at: datetime.datetime
+
+    class Config:
+        from_attributes = True
 
 class LeadStatusUpdate(BaseModel):
     status: str
@@ -65,9 +79,18 @@ app = FastAPI(
 )
 
 # CORS Configuration
+origins = [
+    "https://nexora-frontend-iqem.onrender.com",
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+    "*"
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -91,6 +114,11 @@ def verify_admin(api_key: str = Security(api_key_header)):
 
 # --- Helper Functions ---
 def send_lead_notification_email(lead_name: str, lead_email: str, service: str, message: str):
+    # Skip execution if default dummy credentials are in place
+    if SENDER_PASSWORD == "your-app-password":
+        print("[Notice] SMTP password not set. Skipping lead email alert.")
+        return
+
     try:
         msg = MIMEMultipart()
         msg["From"] = SENDER_EMAIL
@@ -119,6 +147,10 @@ Message:
 @app.get("/")
 def read_root():
     return {"status": "success", "message": "Nexora backend is live"}
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy"}
 
 @app.get("/api/services")
 def get_services():
@@ -174,7 +206,6 @@ def submit_contact(
     db.commit()
     db.refresh(new_lead)
 
-    # Queue email task without blocking the response
     background_tasks.add_task(
         send_lead_notification_email,
         data.name,
@@ -191,7 +222,7 @@ def submit_contact(
 
 # --- Protected Admin Endpoints ---
 
-@app.get("/api/admin/leads", dependencies=[Depends(verify_admin)])
+@app.get("/api/admin/leads", response_model=List[LeadResponse], dependencies=[Depends(verify_admin)])
 def get_leads(
     status: Optional[str] = Query(None, description="Filter leads by status: New, Contacted, Closed"),
     db: Session = Depends(get_db)
