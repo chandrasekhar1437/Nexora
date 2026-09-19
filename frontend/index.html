@@ -134,10 +134,16 @@
   </footer>
 
   <script>
+    // Unified API Base URL (Live Render Backend)
+    const API_BASE_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+      ? "http://127.0.0.1:8000"
+      : "https://nexora-backend-4ijr.onrender.com";
+
     // 1. Fetch Dynamic Services
     async function loadServices() {
       try {
-        const res = await fetch('http://127.0.0.1:8000/api/services');
+        const res = await fetch(`${API_BASE_URL}/api/services`);
+        if (!res.ok) throw new Error("Network response was not ok");
         const services = await res.json();
         const container = document.getElementById('services-container');
         container.innerHTML = services.map(s => `
@@ -147,7 +153,10 @@
           </div>
         `).join('');
       } catch (err) {
-        console.error("Error fetching services", err);
+        console.error("Error fetching services:", err);
+        document.getElementById('services-container').innerHTML = `
+          <p class="text-rose-400 text-center col-span-3 text-sm">Unable to connect to service catalog.</p>
+        `;
       }
     }
 
@@ -163,21 +172,24 @@
       e.preventDefault();
       const payload = {
         project_type: document.getElementById('project-type').value,
-        pages_count: parseInt(pagesInput.value),
+        pages_count: parseInt(pagesInput.value, 10),
         needs_auth: document.getElementById('auth-needed').checked,
         needs_payment_gateway: document.getElementById('payment-needed').checked
       };
 
-      const res = await fetch('http://127.0.0.1:8000/api/estimate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await res.json();
-      document.getElementById('cost-value').textContent = '₹' + data.estimated_price_inr.toLocaleString('en-IN');
-      document.getElementById('timeline-value').textContent = data.delivery_timeline_weeks + ' Weeks';
-      document.getElementById('estimate-result').classList.remove('hidden');
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/estimate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        document.getElementById('cost-value').textContent = '₹' + data.estimated_price_inr.toLocaleString('en-IN');
+        document.getElementById('timeline-value').textContent = data.delivery_timeline_weeks + ' Weeks';
+        document.getElementById('estimate-result').classList.remove('hidden');
+      } catch (err) {
+        console.error("Estimator error:", err);
+      }
     });
 
     // 4. Contact Form Submit
@@ -196,11 +208,13 @@
       };
 
       try {
-        const res = await fetch('http://127.0.0.1:8000/api/contact', {
+        const res = await fetch(`${API_BASE_URL}/api/contact`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
+        
+        if (!res.ok) throw new Error("Failed to submit inquiry");
         const result = await res.json();
         
         alertBox.className = 'mt-4 p-3 rounded-lg text-sm text-center bg-emerald-950/60 text-emerald-400 border border-emerald-600/40';
@@ -209,7 +223,7 @@
         document.getElementById('contact-form').reset();
       } catch (err) {
         alertBox.className = 'mt-4 p-3 rounded-lg text-sm text-center bg-rose-950/60 text-rose-400 border border-rose-600/40';
-        alertBox.textContent = 'Failed to submit form. Verify the backend server is running.';
+        alertBox.textContent = 'Failed to submit form. Backend service might be waking up; please retry.';
         alertBox.classList.remove('hidden');
       } finally {
         btn.disabled = false;
