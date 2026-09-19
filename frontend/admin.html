@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexora Admin — Lead Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen p-6 md:p-10">
+
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-slate-800 gap-4">
+      <div>
+        <h1 class="text-3xl font-extrabold text-cyan-400">Nexora Admin Portal</h1>
+        <p class="text-slate-400 text-sm mt-1">Live inquiries captured in SQLite database</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <select id="filter-status" onchange="fetchLeads()" class="bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded-lg p-2.5 outline-none focus:border-cyan-400">
+          <option value="">All Leads</option>
+          <option value="New">New</option>
+          <option value="Contacted">Contacted</option>
+          <option value="Closed">Closed</option>
+        </select>
+        <button onclick="fetchLeads()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-4 py-2.5 rounded-lg text-sm transition">
+          Refresh
+        </button>
+        <button onclick="resetKey()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2.5 rounded-lg text-xs transition">
+          Change Key
+        </button>
+      </div>
+    </div>
+
+    <!-- Leads Table -->
+    <div class="mt-8 overflow-x-auto glass-card rounded-xl shadow-2xl">
+      <table class="w-full text-left border-collapse text-sm">
+        <thead>
+          <tr class="border-b border-slate-800 bg-slate-900/60 text-slate-300">
+            <th class="p-4">ID</th>
+            <th class="p-4">Client Name</th>
+            <th class="p-4">Contact</th>
+            <th class="p-4">Service</th>
+            <th class="p-4">Message</th>
+            <th class="p-4">Status</th>
+            <th class="p-4 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="leads-body" class="divide-y divide-slate-800/60">
+          <tr>
+            <td colspan="7" class="p-6 text-center text-slate-500">Loading inquiries...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://127.0.0.1:8000/api/admin/leads';
+
+    function getAdminKey() {
+      let key = localStorage.getItem('nexora_admin_key');
+      if (!key) {
+        key = prompt("Enter Admin Key (default: nexora_admin_secret_2026):");
+        if (key) {
+          localStorage.setItem('nexora_admin_key', key.trim());
+        }
+      }
+      return key;
+    }
+
+    function resetKey() {
+      localStorage.removeItem('nexora_admin_key');
+      getAdminKey();
+      fetchLeads();
+    }
+
+    async function fetchLeads() {
+      const key = getAdminKey();
+      const filter = document.getElementById('filter-status').value;
+      const url = filter ? `${API_BASE}?status=${filter}` : API_BASE;
+      const tbody = document.getElementById('leads-body');
+
+      try {
+        const res = await fetch(url, {
+          headers: {
+            'X-Admin-Key': key || ''
+          }
+        });
+
+        if (res.status === 401) {
+          localStorage.removeItem('nexora_admin_key');
+          tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-amber-400 font-medium">Invalid Admin Key. Click 'Change Key' above to re-enter.</td></tr>`;
+          return;
+        }
+
+        if (!res.ok) {
+          throw new Error('Server returned ' + res.status);
+        }
+
+        const leads = await res.json();
+
+        if (!Array.isArray(leads) || leads.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-500">No leads found in database.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = leads.map(item => `
+          <tr class="hover:bg-slate-900/40 transition">
+            <td class="p-4 text-cyan-400 font-mono">#${item.id}</td>
+            <td class="p-4 font-semibold text-white">${item.name}</td>
+            <td class="p-4 text-slate-300">
+              <div>${item.email}</div>
+              <div class="text-xs text-slate-500">${new Date(item.created_at).toLocaleDateString()}</div>
+            </td>
+            <td class="p-4">
+              <span class="px-2.5 py-1 rounded-full text-xs bg-cyan-950/80 border border-cyan-700/50 text-cyan-300">
+                ${item.service_interested}
+              </span>
+            </td>
+            <td class="p-4 text-slate-400 max-w-xs truncate" title="${item.message}">${item.message}</td>
+            <td class="p-4">
+              <select onchange="updateStatus(${item.id}, this.value)" class="bg-slate-900 border border-slate-700 text-xs rounded px-2 py-1 text-slate-200 outline-none">
+                <option value="New" ${item.status === 'New' ? 'selected' : ''}>New</option>
+                <option value="Contacted" ${item.status === 'Contacted' ? 'selected' : ''}>Contacted</option>
+                <option value="Closed" ${item.status === 'Closed' ? 'selected' : ''}>Closed</option>
+              </select>
+            </td>
+            <td class="p-4 text-right">
+              <button onclick="deleteLead(${item.id})" class="px-3 py-1 bg-rose-950 hover:bg-rose-900 border border-rose-700/50 text-rose-300 rounded text-xs transition">
+                Delete
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-rose-500">Backend offline or failed to fetch leads. Make sure Uvicorn is running.</td></tr>`;
+      }
+    }
+
+    async function updateStatus(id, newStatus) {
+      const key = getAdminKey();
+      try {
+        await fetch(`${API_BASE}/${id}`, {
+          method: 'PATCH',
+          headers: { 
+            'Content-Type': 'application/json',
+            'X-Admin-Key': key || ''
+          },
+          body: JSON.stringify({ status: newStatus })
+        });
+      } catch (err) {
+        alert("Failed to update status");
+      }
+    }
+
+    async function deleteLead(id) {
+      if (!confirm(`Are you sure you want to delete lead #${id}?`)) return;
+      const key = getAdminKey();
+      try {
+        const res = await fetch(`${API_BASE}/${id}`, { 
+          method: 'DELETE',
+          headers: {
+            'X-Admin-Key': key || ''
+          }
+        });
+        if (res.ok) fetchLeads();
+      } catch (err) {
+        alert("Failed to delete lead");
+      }
+    }
+
+    // Initialize fetch on page load
+    fetchLeads();
+  </script>
+</body>
+</html>

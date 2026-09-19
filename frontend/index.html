@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nexora — Next-Gen Tech Solutions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="flex items-center justify-between px-8 py-5 border-b border-slate-800 backdrop-blur-md sticky top-0 z-50 bg-slate-950/80">
+    <div class="text-2xl font-black tracking-wider text-cyan-400">NEXORA</div>
+    <div class="space-x-8 text-sm font-medium text-slate-300">
+      <a href="#services" class="hover:text-cyan-400 transition">Services</a>
+      <a href="#estimator" class="hover:text-cyan-400 transition">Price Estimator</a>
+      <a href="#contact" class="hover:text-cyan-400 transition">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="py-24 text-center px-4 max-w-4xl mx-auto">
+    <span class="text-xs uppercase tracking-widest text-cyan-400 bg-cyan-950/60 border border-cyan-700/50 px-3 py-1.5 rounded-full">
+      Engineering Next-Gen Systems
+    </span>
+    <h1 class="text-5xl md:text-6xl font-extrabold mt-6 tracking-tight leading-tight">
+      Transforming Vision Into High-Speed Reality.
+    </h1>
+    <p class="text-slate-400 mt-6 text-lg max-w-2xl mx-auto">
+      Scalable cloud architectures, production-ready full-stack systems, and hands-on developer training.
+    </p>
+  </header>
+
+  <!-- Services (Backend Dynamic) -->
+  <section id="services" class="py-16 px-8 max-w-6xl mx-auto">
+    <h2 class="text-3xl font-bold mb-10 text-center">Core Capabilities</h2>
+    <div id="services-container" class="grid md:grid-cols-3 gap-8">
+      <p class="text-slate-500 text-center col-span-3">Loading services from backend...</p>
+    </div>
+  </section>
+
+  <!-- Interactive Cost Estimator -->
+  <section id="estimator" class="py-16 px-8 max-w-3xl mx-auto">
+    <div class="glass-card p-8 rounded-2xl">
+      <h2 class="text-2xl font-bold mb-2 text-cyan-400">Instant Project Estimator</h2>
+      <p class="text-slate-400 text-sm mb-6">Select your specs to calculate an instant cost via FastAPI.</p>
+
+      <form id="estimator-form" class="space-y-5">
+        <div>
+          <label class="block text-sm mb-2 text-slate-300">Project Type</label>
+          <select id="project-type" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm focus:outline-cyan-500 text-white">
+            <option value="Web App">Web Application</option>
+            <option value="Mobile App">Mobile Application</option>
+            <option value="Enterprise Architecture">Enterprise System</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm mb-2 text-slate-300">Estimated Pages/Views: <span id="pages-display" class="text-cyan-400 font-bold">5</span></label>
+          <input type="range" id="pages-count" min="1" max="25" value="5" class="w-full accent-cyan-400" />
+        </div>
+
+        <div class="flex gap-6 text-sm text-slate-300">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="auth-needed" class="accent-cyan-400" checked /> User Auth & Roles
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="payment-needed" class="accent-cyan-400" /> Payment Gateway
+          </label>
+        </div>
+
+        <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-lg transition">
+          Calculate Estimate
+        </button>
+      </form>
+
+      <div id="estimate-result" class="hidden mt-6 p-4 rounded-lg bg-cyan-950/40 border border-cyan-600/40">
+        <p class="text-sm text-slate-300">Estimated Cost: <span id="cost-value" class="text-cyan-400 text-xl font-bold"></span></p>
+        <p class="text-sm text-slate-400">Estimated Timeline: <span id="timeline-value" class="text-slate-200 font-semibold"></span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-16 px-8 max-w-3xl mx-auto">
+    <div class="glass-card p-8 rounded-2xl">
+      <h2 class="text-2xl font-bold mb-2 text-cyan-400">Get In Touch</h2>
+      <p class="text-slate-400 text-sm mb-6">Have a project in mind? Reach out and we'll reply shortly.</p>
+
+      <form id="contact-form" class="space-y-4">
+        <div>
+          <label class="block text-sm mb-1 text-slate-300">Your Name</label>
+          <input type="text" id="contact-name" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm focus:outline-cyan-500 text-white" placeholder="Rahul Sharma" />
+        </div>
+
+        <div>
+          <label class="block text-sm mb-1 text-slate-300">Email Address</label>
+          <input type="email" id="contact-email" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm focus:outline-cyan-500 text-white" placeholder="name@company.com" />
+        </div>
+
+        <div>
+          <label class="block text-sm mb-1 text-slate-300">Service Interested In</label>
+          <select id="contact-service" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm focus:outline-cyan-500 text-white">
+            <option value="Full-Stack Web Development">Full-Stack Web Development</option>
+            <option value="Cloud & DevOps Architecture">Cloud & DevOps Architecture</option>
+            <option value="Corporate IT Training">Corporate IT Training</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm mb-1 text-slate-300">Message</label>
+          <textarea id="contact-message" rows="4" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm focus:outline-cyan-500 text-white" placeholder="Brief project details..."></textarea>
+        </div>
+
+        <button type="submit" id="contact-submit-btn" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-lg transition">
+          Send Message
+        </button>
+      </form>
+
+      <div id="contact-alert" class="hidden mt-4 p-3 rounded-lg text-sm text-center"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-8 text-center text-xs text-slate-600 border-t border-slate-900">
+    © 2026 Nexora Tech Solutions. All rights reserved.
+  </footer>
+
+  <script>
+    // 1. Fetch Dynamic Services
+    async function loadServices() {
+      try {
+        const res = await fetch('http://127.0.0.1:8000/api/services');
+        const services = await res.json();
+        const container = document.getElementById('services-container');
+        container.innerHTML = services.map(s => `
+          <div class="glass-card p-6 rounded-xl hover:border-cyan-500/40 transition">
+            <h3 class="text-xl font-semibold text-white mb-2">${s.title}</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">${s.desc}</p>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error("Error fetching services", err);
+      }
+    }
+
+    // 2. Slider Display
+    const pagesInput = document.getElementById('pages-count');
+    const pagesDisplay = document.getElementById('pages-display');
+    pagesInput.addEventListener('input', (e) => {
+      pagesDisplay.textContent = e.target.value;
+    });
+
+    // 3. Estimator Submit
+    document.getElementById('estimator-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        project_type: document.getElementById('project-type').value,
+        pages_count: parseInt(pagesInput.value),
+        needs_auth: document.getElementById('auth-needed').checked,
+        needs_payment_gateway: document.getElementById('payment-needed').checked
+      };
+
+      const res = await fetch('http://127.0.0.1:8000/api/estimate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+      document.getElementById('cost-value').textContent = '₹' + data.estimated_price_inr.toLocaleString('en-IN');
+      document.getElementById('timeline-value').textContent = data.delivery_timeline_weeks + ' Weeks';
+      document.getElementById('estimate-result').classList.remove('hidden');
+    });
+
+    // 4. Contact Form Submit
+    document.getElementById('contact-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('contact-submit-btn');
+      const alertBox = document.getElementById('contact-alert');
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      const payload = {
+        name: document.getElementById('contact-name').value,
+        email: document.getElementById('contact-email').value,
+        service_interested: document.getElementById('contact-service').value,
+        message: document.getElementById('contact-message').value
+      };
+
+      try {
+        const res = await fetch('http://127.0.0.1:8000/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        
+        alertBox.className = 'mt-4 p-3 rounded-lg text-sm text-center bg-emerald-950/60 text-emerald-400 border border-emerald-600/40';
+        alertBox.textContent = result.message;
+        alertBox.classList.remove('hidden');
+        document.getElementById('contact-form').reset();
+      } catch (err) {
+        alertBox.className = 'mt-4 p-3 rounded-lg text-sm text-center bg-rose-950/60 text-rose-400 border border-rose-600/40';
+        alertBox.textContent = 'Failed to submit form. Verify the backend server is running.';
+        alertBox.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+      }
+    });
+
+    loadServices();
+  </script>
+</body>
+</html>
