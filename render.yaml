@@ -16,7 +16,6 @@ services:
   - type: web
     name: nexora-frontend
     runtime: static
-    region: oregon
     plan: free
     rootDir: frontend
     staticPublishPath: .
