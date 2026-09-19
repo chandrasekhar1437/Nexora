@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nexora — Premium Engineering & Digital Agency</title>
+  <title>Nexora — Enterprise Software Engineering & Client Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,29 +21,21 @@
       backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.07);
     }
-    .hero-gradient {
-      background: radial-gradient(circle 500px at 50% 10%, rgba(6, 182, 212, 0.15), transparent 70%);
-    }
-    /* Mobile Drawer slide animation */
     #mobile-drawer {
       transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    #mobile-drawer.closed {
-      transform: translateX(100%);
-    }
-    #mobile-drawer.open {
-      transform: translateX(0);
-    }
+    #mobile-drawer.closed { transform: translateX(100%); }
+    #mobile-drawer.open { transform: translateX(0); }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-cyan-500 selection:text-slate-950 overflow-x-hidden">
 
   <!-- Main Navbar -->
-  <nav class="sticky top-0 z-40 glass-panel border-b border-slate-800">
-    <div class="max-w-7xl mx-auto px-5 sm:px-8">
-      <div class="flex items-center justify-between h-18 py-4">
+  <nav class="sticky top-0 z-40 glass-panel border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-18 py-3.5">
         
-        <!-- Brand Logo -->
+        <!-- Logo -->
         <a href="#" class="flex items-center gap-2.5">
           <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-black text-slate-950 text-lg shadow-lg shadow-cyan-500/25">
             N
@@ -52,20 +44,31 @@
         </a>
 
         <!-- Desktop Navigation -->
-        <div class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-300">
+        <div class="hidden md:flex items-center space-x-7 text-sm font-semibold text-slate-300">
           <a href="#services" class="hover:text-cyan-400 transition">Services</a>
           <a href="#portfolio" class="hover:text-cyan-400 transition">Portfolio</a>
+          <a href="#techstack" class="hover:text-cyan-400 transition">Stack</a>
           <a href="#process" class="hover:text-cyan-400 transition">Workflow</a>
-          <a href="#estimator" class="hover:text-cyan-400 transition">Cost Estimator</a>
-          <a href="#contact" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition shadow-lg shadow-emerald-500/20">
-            Get Proposal
-          </a>
+          <a href="#estimator" class="hover:text-cyan-400 transition">Pricing</a>
+          
+          <!-- Dynamic Auth Button -->
+          <div id="auth-nav-container" class="flex items-center gap-3">
+            <button id="open-auth-btn" class="px-4 py-2 rounded-lg border border-slate-700 hover:border-cyan-400 text-xs text-white font-semibold transition">
+              Sign In / Register
+            </button>
+            <a href="#contact" class="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shadow-lg shadow-emerald-500/20">
+              Get Proposal
+            </a>
+          </div>
         </div>
 
-        <!-- Mobile Hamburger Button -->
-        <div class="md:hidden flex items-center">
-          <button id="open-menu-btn" aria-label="Open Menu" class="p-2 text-slate-300 hover:text-white rounded-lg focus:outline-none">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Mobile Hamburger -->
+        <div class="md:hidden flex items-center gap-2">
+          <button id="mobile-auth-btn" class="px-3 py-1.5 rounded-lg border border-slate-700 text-xs font-semibold text-cyan-400">
+            Login
+          </button>
+          <button id="open-menu-btn" class="p-2 text-slate-300 hover:text-white rounded-lg">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
@@ -74,250 +77,221 @@
     </div>
   </nav>
 
-  <!-- Fullscreen Mobile Drawer (Reference: Nuvrotech style) -->
+  <!-- Mobile Drawer -->
   <div id="mobile-drawer" class="fixed inset-0 z-50 bg-slate-950/98 closed md:hidden flex flex-col justify-between p-6">
     <div>
-      <!-- Drawer Top Bar -->
-      <div class="flex items-center justify-between border-b border-slate-800 pb-5">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-black text-slate-950 text-base">
-            N
-          </div>
-          <span class="text-xl font-extrabold text-white">NEXORA</span>
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-black text-slate-950">N</div>
+          <span class="text-xl font-bold text-white">NEXORA</span>
         </div>
-        <button id="close-menu-btn" aria-label="Close Menu" class="p-2 text-slate-400 hover:text-white rounded-lg">
-          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+        <button id="close-menu-btn" class="p-2 text-slate-400 hover:text-white">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
 
-      <!-- Drawer Links -->
-      <div class="mt-8 space-y-5 text-lg font-semibold text-slate-200">
-        <a href="#" class="drawer-link block hover:text-cyan-400 py-1 transition">Home</a>
-        <a href="#services" class="drawer-link block hover:text-cyan-400 py-1 transition">Services</a>
-        <a href="#portfolio" class="drawer-link block hover:text-cyan-400 py-1 transition">Portfolio</a>
-        <a href="#process" class="drawer-link block hover:text-cyan-400 py-1 transition">Workflow</a>
-        <a href="#estimator" class="drawer-link block hover:text-cyan-400 py-1 transition">Pricing & Estimator</a>
-        <a href="#contact" class="drawer-link block hover:text-cyan-400 py-1 transition">Contact</a>
+      <div class="mt-6 space-y-4 text-base font-medium text-slate-200">
+        <a href="#services" class="drawer-link block py-2 border-b border-slate-900">Services</a>
+        <a href="#portfolio" class="drawer-link block py-2 border-b border-slate-900">Portfolio & Case Studies</a>
+        <a href="#techstack" class="drawer-link block py-2 border-b border-slate-900">Architecture & Stack</a>
+        <a href="#process" class="drawer-link block py-2 border-b border-slate-900">Delivery Methodology</a>
+        <a href="#estimator" class="drawer-link block py-2 border-b border-slate-900">Scope & Cost Estimator</a>
+        <a href="#contact" class="drawer-link block py-2">Consultation</a>
       </div>
     </div>
 
-    <!-- Drawer Footer CTA -->
-    <div class="pt-6 border-t border-slate-800/80">
-      <a href="#contact" class="drawer-link block w-full py-4 text-center rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-base shadow-lg shadow-emerald-900/40">
+    <div>
+      <a href="#contact" class="drawer-link block w-full py-3.5 text-center rounded-xl bg-emerald-500 text-slate-950 font-bold text-sm">
         Get Proposal
       </a>
-      <p class="text-center text-xs text-slate-500 mt-4">support@nexora.internal • ISO 27001 Ready</p>
     </div>
   </div>
 
-  <!-- Hero Section -->
-  <header class="relative pt-16 pb-14 md:pt-28 md:pb-24 px-5 hero-gradient text-center">
+  <!-- Client Portal Bar (Displays when logged in) -->
+  <div id="client-portal-banner" class="hidden bg-cyan-950/60 border-b border-cyan-800/50 py-3 px-4">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span class="text-slate-300">Authenticated Session: <strong id="portal-user-name" class="text-white"></strong> (<span id="portal-user-email" class="text-cyan-400"></span>)</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span id="portal-tickets-count" class="text-slate-400">0 Active Requests</span>
+        <button id="logout-btn" class="text-rose-400 hover:underline font-semibold">Sign Out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Header -->
+  <header class="relative pt-16 pb-16 md:pt-28 md:pb-24 px-4 text-center">
     <div class="max-w-4xl mx-auto">
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-xs font-semibold mb-6">
-        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-        Next-Gen Software Architecture & Cloud Labs
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-xs font-semibold mb-6">
+        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+        Production Engineering & Enterprise Digital Systems
       </div>
       <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight">
-        Build Systems That <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-emerald-400">Scale Without Limits.</span>
+        Next-Generation Software <br class="hidden sm:block" />
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-emerald-400">Engineered For Resilience.</span>
       </h1>
-      <p class="text-slate-400 mt-6 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-        High-performance web architecture, bespoke ERP & SaaS engines, and cloud-native solutions engineered for real-world growth.
+      <p class="text-slate-400 mt-5 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+        Nexora builds cloud architectures, bespoke ERP workflows, and multi-tenant SaaS backends with guaranteed performance SLAs.
       </p>
       
       <div class="mt-8 flex flex-col sm:flex-row gap-3.5 justify-center max-w-md mx-auto sm:max-w-none">
-        <a href="#estimator" class="px-7 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition text-center shadow-lg shadow-emerald-500/20">
+        <a href="#estimator" class="px-7 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition text-center shadow-lg shadow-emerald-500/20">
           Calculate Project Cost
         </a>
-        <a href="#portfolio" class="px-7 py-4 rounded-xl glass-card hover:bg-slate-900 text-slate-200 border border-slate-700 font-semibold text-sm transition text-center">
-          Explore Case Studies
+        <a href="#portfolio" class="px-7 py-3.5 rounded-xl glass-card hover:bg-slate-900 text-slate-200 border border-slate-700 font-semibold text-sm transition text-center">
+          View Case Studies
         </a>
       </div>
     </div>
   </header>
 
   <!-- Metrics Bar -->
-  <section class="border-y border-slate-800/80 py-8 bg-slate-900/40">
-    <div class="max-w-6xl mx-auto px-5 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+  <section class="border-y border-slate-800/80 py-8 bg-slate-900/30">
+    <div class="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
       <div>
-        <p class="text-3xl sm:text-4xl font-extrabold text-cyan-400">50+</p>
-        <p class="text-xs text-slate-400 uppercase tracking-wider mt-1">Completed Launches</p>
+        <p class="text-3xl sm:text-4xl font-black text-cyan-400">99.98%</p>
+        <p class="text-xs text-slate-400 uppercase tracking-wider mt-1 font-semibold">Target Uptime SLA</p>
       </div>
       <div>
-        <p class="text-3xl sm:text-4xl font-extrabold text-white">99.9%</p>
-        <p class="text-xs text-slate-400 uppercase tracking-wider mt-1">Uptime SLA</p>
+        <p class="text-3xl sm:text-4xl font-black text-white">45+</p>
+        <p class="text-xs text-slate-400 uppercase tracking-wider mt-1 font-semibold">Deployments Handled</p>
       </div>
       <div>
-        <p class="text-3xl sm:text-4xl font-extrabold text-emerald-400">3.5x</p>
-        <p class="text-xs text-slate-400 uppercase tracking-wider mt-1">Avg ROI Multiplier</p>
+        <p class="text-3xl sm:text-4xl font-black text-emerald-400">&lt; 120ms</p>
+        <p class="text-xs text-slate-400 uppercase tracking-wider mt-1 font-semibold">Average Response Time</p>
       </div>
       <div>
-        <p class="text-3xl sm:text-4xl font-extrabold text-white">24/7</p>
-        <p class="text-xs text-slate-400 uppercase tracking-wider mt-1">Ops & Monitoring</p>
+        <p class="text-3xl sm:text-4xl font-black text-white">ISO 27001</p>
+        <p class="text-xs text-slate-400 uppercase tracking-wider mt-1 font-semibold">Security Baseline</p>
       </div>
     </div>
   </section>
 
-  <!-- Interactive Filterable Portfolio Section -->
-  <section id="portfolio" class="py-20 px-5 max-w-7xl mx-auto">
+  <!-- Portfolio Section -->
+  <section id="portfolio" class="py-20 px-4 max-w-7xl mx-auto">
     <div class="text-center max-w-2xl mx-auto mb-10">
-      <span class="text-cyan-400 font-bold text-xs uppercase tracking-widest">Selected Work</span>
-      <h2 class="text-3xl sm:text-4xl font-black text-white mt-2">Enterprise Case Studies</h2>
-      <p class="text-slate-400 text-sm mt-2">High-impact platforms built with modern scalable stacks.</p>
+      <span class="text-cyan-400 font-bold text-xs uppercase tracking-widest">Case Studies</span>
+      <h2 class="text-3xl font-black text-white mt-2">Engineered Implementations</h2>
     </div>
 
-    <!-- Filter Buttons (Like Nuvrotech) -->
+    <!-- Category Filters -->
     <div class="flex flex-wrap items-center justify-center gap-2 mb-10">
-      <button class="portfolio-filter px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-cyan-500 text-slate-950 transition" data-filter="all">All</button>
-      <button class="portfolio-filter px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 transition" data-filter="web">Web Apps</button>
-      <button class="portfolio-filter px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 transition" data-filter="erp">ERP / CRM</button>
-      <button class="portfolio-filter px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-900 hover:bg-slate-800 text-slate-300 transition" data-filter="saas">SaaS Systems</button>
+      <button class="portfolio-filter px-4 py-2 rounded-xl text-xs font-semibold bg-cyan-500 text-slate-950" data-filter="all">All Platforms</button>
+      <button class="portfolio-filter px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 text-slate-300 hover:bg-slate-800" data-filter="web">Web Architectures</button>
+      <button class="portfolio-filter px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 text-slate-300 hover:bg-slate-800" data-filter="erp">ERP & Workflows</button>
+      <button class="portfolio-filter px-4 py-2 rounded-xl text-xs font-semibold bg-slate-900 text-slate-300 hover:bg-slate-800" data-filter="saas">SaaS Engines</button>
     </div>
 
-    <!-- Project Cards Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      
-      <!-- Card 1 -->
-      <div class="portfolio-item glass-card rounded-2xl overflow-hidden border border-slate-800 flex flex-col" data-category="erp">
-        <div class="h-48 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80');">
-          <div class="w-full h-full bg-slate-950/40 p-4 flex items-start justify-between">
-            <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-950/80 text-cyan-400 border border-slate-700">ERP / CRM</span>
-          </div>
-        </div>
-        <div class="p-6 flex-1 flex flex-col justify-between">
-          <div>
-            <h3 class="text-xl font-bold text-white mb-2">OmniFlow Real Estate CRM</h3>
-            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">Centralized inventory management and lead conversion portal with multi-agent commission tracking.</p>
-          </div>
-          <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs">
-            <span class="text-emerald-400 font-semibold">+40% Lead Velocity</span>
-            <span class="text-slate-500">FastAPI + Vue</span>
-          </div>
-        </div>
+    <div id="portfolio-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="glass-card p-6 rounded-2xl animate-pulse text-center col-span-full">
+        <p class="text-slate-500 text-sm">Loading dynamic portfolio projects...</p>
       </div>
+    </div>
+  </section>
 
-      <!-- Card 2 -->
-      <div class="portfolio-item glass-card rounded-2xl overflow-hidden border border-slate-800 flex flex-col" data-category="saas">
-        <div class="h-48 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80');">
-          <div class="w-full h-full bg-slate-950/40 p-4 flex items-start justify-between">
-            <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-950/80 text-purple-400 border border-slate-700">SaaS</span>
-          </div>
-        </div>
-        <div class="p-6 flex-1 flex flex-col justify-between">
-          <div>
-            <h3 class="text-xl font-bold text-white mb-2">Vanguard Cloud Analytics</h3>
-            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">Multi-tenant telemetry visualization platform capable of processing 10k telemetry events per second.</p>
-          </div>
-          <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs">
-            <span class="text-cyan-400 font-semibold">&lt; 120ms Query Speed</span>
-            <span class="text-slate-500">Python + TimescaleDB</span>
-          </div>
-        </div>
+  <!-- Technology Stack Grid -->
+  <section id="techstack" class="py-16 px-4 max-w-6xl mx-auto border-t border-slate-900">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <span class="text-cyan-400 font-bold text-xs uppercase tracking-widest">Technology Stack</span>
+      <h2 class="text-3xl font-black text-white mt-2">Modern Enterprise Foundations</h2>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div class="glass-card p-5 rounded-xl text-center border-slate-800">
+        <p class="text-sm font-bold text-cyan-400">Python / FastAPI</p>
+        <p class="text-xs text-slate-500 mt-1">High-Throughput Backends</p>
       </div>
-
-      <!-- Card 3 -->
-      <div class="portfolio-item glass-card rounded-2xl overflow-hidden border border-slate-800 flex flex-col" data-category="web">
-        <div class="h-48 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80');">
-          <div class="w-full h-full bg-slate-950/40 p-4 flex items-start justify-between">
-            <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-950/80 text-emerald-400 border border-slate-700">Web App</span>
-          </div>
-        </div>
-        <div class="p-6 flex-1 flex flex-col justify-between">
-          <div>
-            <h3 class="text-xl font-bold text-white mb-2">PrimeSupply B2B Commerce</h3>
-            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">Custom checkout pipeline with localized currency settling, tax engines, and automated invoice delivery.</p>
-          </div>
-          <div class="mt-4 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs">
-            <span class="text-emerald-400 font-semibold">99.99% Checkout Uptime</span>
-            <span class="text-slate-500">FastAPI + Stripe</span>
-          </div>
-        </div>
+      <div class="glass-card p-5 rounded-xl text-center border-slate-800">
+        <p class="text-sm font-bold text-cyan-400">PostgreSQL / Redis</p>
+        <p class="text-xs text-slate-500 mt-1">ACID & Low-Latency Cache</p>
       </div>
-
+      <div class="glass-card p-5 rounded-xl text-center border-slate-800">
+        <p class="text-sm font-bold text-cyan-400">Docker & Kubernetes</p>
+        <p class="text-xs text-slate-500 mt-1">Immutable Deployments</p>
+      </div>
+      <div class="glass-card p-5 rounded-xl text-center border-slate-800">
+        <p class="text-sm font-bold text-cyan-400">Tailwind & React</p>
+        <p class="text-xs text-slate-500 mt-1">Accessible Mobile-First UI</p>
+      </div>
     </div>
   </section>
 
   <!-- Dynamic Services Catalog -->
-  <section id="services" class="py-16 px-5 max-w-7xl mx-auto border-t border-slate-900">
+  <section id="services" class="py-16 px-4 max-w-7xl mx-auto border-t border-slate-900">
     <div class="text-center max-w-2xl mx-auto mb-12">
-      <span class="text-cyan-400 font-bold text-xs uppercase tracking-widest">Capabilities</span>
-      <h2 class="text-3xl sm:text-4xl font-black text-white mt-2">Specialized Engineering Services</h2>
+      <span class="text-cyan-400 font-bold text-xs uppercase tracking-widest">Engineering Services</span>
+      <h2 class="text-3xl font-black text-white mt-2">Specialized Capabilities</h2>
     </div>
-
-    <div id="services-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div class="glass-card p-6 rounded-2xl animate-pulse text-center col-span-full">
-        <p class="text-slate-500 text-sm">Connecting to Nexora backend services...</p>
-      </div>
-    </div>
+    <div id="services-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
   </section>
 
-  <!-- Process Workflow -->
-  <section id="process" class="py-16 px-5 max-w-6xl mx-auto border-t border-slate-900">
-    <div class="text-center max-w-2xl mx-auto mb-14">
+  <!-- Process Methodology -->
+  <section id="process" class="py-16 px-4 max-w-6xl mx-auto border-t border-slate-900">
+    <div class="text-center max-w-2xl mx-auto mb-12">
       <span class="text-cyan-400 font-bold text-xs uppercase tracking-widest">Execution Path</span>
-      <h2 class="text-3xl sm:text-4xl font-black text-white mt-2">From Architecture to Production</h2>
+      <h2 class="text-3xl font-black text-white mt-2">How We Build For Scale</h2>
     </div>
-
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       <div class="glass-card p-6 rounded-2xl">
-        <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">01. AUDIT</span>
-        <h3 class="text-lg font-bold text-white mt-4">Discovery</h3>
-        <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">System topology audit, database schema mapping, and business logic verification.</p>
+        <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">01. DISCOVER</span>
+        <h3 class="text-base font-bold text-white mt-4">Audit & Scope</h3>
+        <p class="text-slate-400 text-xs mt-2 leading-relaxed">System architecture analysis, database modeling, and threat boundary identification.</p>
       </div>
       <div class="glass-card p-6 rounded-2xl">
-        <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">02. DESIGN</span>
-        <h3 class="text-lg font-bold text-white mt-4">Architecture</h3>
-        <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">Microservice boundaries, asynchronous event queues, and zero-trust authentication design.</p>
+        <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">02. BLUEPRINT</span>
+        <h3 class="text-base font-bold text-white mt-4">API & Schemas</h3>
+        <p class="text-slate-400 text-xs mt-2 leading-relaxed">Contract-first API definitions, database migration scripts, and auth blueprints.</p>
       </div>
       <div class="glass-card p-6 rounded-2xl">
         <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">03. SPRINT</span>
-        <h3 class="text-lg font-bold text-white mt-4">Development</h3>
-        <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">High-velocity test-driven delivery with automated CI/CD staging environments.</p>
+        <h3 class="text-base font-bold text-white mt-4">Test & Ship</h3>
+        <p class="text-slate-400 text-xs mt-2 leading-relaxed">Automated CI/CD integration, continuous staging demos, and load stress testing.</p>
       </div>
       <div class="glass-card p-6 rounded-2xl">
-        <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">04. LAUNCH</span>
-        <h3 class="text-lg font-bold text-white mt-4">Scale & Monitor</h3>
-        <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">Zero-downtime cutover, APM tracing, database backups, and client engineering handoff.</p>
+        <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">04. OPERATE</span>
+        <h3 class="text-base font-bold text-white mt-4">Telemetry & Ops</h3>
+        <p class="text-slate-400 text-xs mt-2 leading-relaxed">Continuous production monitoring, database failover checks, and team training.</p>
       </div>
     </div>
   </section>
 
   <!-- Interactive Estimator -->
-  <section id="estimator" class="py-16 px-5 max-w-4xl mx-auto">
+  <section id="estimator" class="py-16 px-4 max-w-4xl mx-auto">
     <div class="glass-panel p-6 sm:p-10 rounded-3xl border border-slate-800 shadow-2xl">
       <div class="max-w-xl">
-        <span class="text-emerald-400 font-bold text-xs uppercase tracking-widest">Instant Calculator</span>
-        <h2 class="text-2xl sm:text-3xl font-black text-white mt-1">Scope & Pricing Estimator</h2>
-        <p class="text-slate-400 text-xs sm:text-sm mt-2">Get quick estimates calculated via FastAPI algorithms.</p>
+        <span class="text-emerald-400 font-bold text-xs uppercase tracking-widest">Scope Calculator</span>
+        <h2 class="text-2xl sm:text-3xl font-black text-white mt-1">Estimate Project Investment</h2>
+        <p class="text-slate-400 text-xs sm:text-sm mt-2">Real-time estimations powered by our FastAPI pricing engine.</p>
       </div>
 
       <form id="estimator-form" class="mt-8 space-y-6">
         <div>
-          <label class="block text-xs uppercase tracking-wider text-slate-300 mb-2 font-semibold">Solution Architecture</label>
-          <select id="project-type" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-3.5 text-sm focus:border-cyan-400 text-white outline-none">
+          <label class="block text-xs uppercase tracking-wider text-slate-300 mb-2 font-semibold">Solution Type</label>
+          <select id="project-type" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-3.5 text-sm text-white outline-none focus:border-cyan-400">
             <option value="Web App">Web Application (FastAPI / Dynamic SPA)</option>
-            <option value="Mobile App">Cross-Platform Mobile App</option>
-            <option value="Enterprise Architecture">Enterprise ERP / CRM Platform</option>
+            <option value="Mobile App">Mobile Application</option>
+            <option value="Enterprise Architecture">Enterprise ERP / Distributed System</option>
           </select>
         </div>
 
         <div>
           <div class="flex justify-between items-center mb-2">
-            <label class="text-xs uppercase tracking-wider text-slate-300 font-semibold">Scale (Views / Modules)</label>
+            <label class="text-xs uppercase tracking-wider text-slate-300 font-semibold">Module / View Count</label>
             <span id="pages-display" class="text-cyan-400 font-bold text-sm bg-slate-900 px-3 py-1 rounded-lg border border-slate-800">5</span>
           </div>
           <input type="range" id="pages-count" min="1" max="25" value="5" class="w-full accent-cyan-400 cursor-pointer" />
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-slate-300">
-          <label class="flex items-center gap-3 p-3.5 rounded-xl border border-slate-800 hover:bg-slate-900/50 cursor-pointer transition">
+          <label class="flex items-center gap-3 p-3.5 rounded-xl border border-slate-800 hover:bg-slate-900/50 cursor-pointer">
             <input type="checkbox" id="auth-needed" class="w-4 h-4 accent-cyan-400" checked />
-            <span class="text-xs font-medium">Enterprise Auth & Role Security</span>
+            <span class="text-xs font-medium">JWT & Role-Based Auth Matrix</span>
           </label>
-          <label class="flex items-center gap-3 p-3.5 rounded-xl border border-slate-800 hover:bg-slate-900/50 cursor-pointer transition">
+          <label class="flex items-center gap-3 p-3.5 rounded-xl border border-slate-800 hover:bg-slate-900/50 cursor-pointer">
             <input type="checkbox" id="payment-needed" class="w-4 h-4 accent-cyan-400" />
-            <span class="text-xs font-medium">Payment & Billing Gateway</span>
+            <span class="text-xs font-medium">Payment & Subscription Gateway</span>
           </label>
         </div>
 
@@ -328,51 +302,70 @@
 
       <div id="estimate-result" class="hidden mt-8 p-6 rounded-2xl bg-cyan-950/30 border border-cyan-500/30 flex flex-col sm:flex-row justify-between items-center gap-4">
         <div>
-          <p class="text-xs uppercase tracking-wider text-slate-400">Budget Guidance</p>
+          <p class="text-xs uppercase tracking-wider text-slate-400">Budget Range</p>
           <p id="cost-value" class="text-2xl sm:text-3xl font-black text-cyan-400 mt-1"></p>
         </div>
         <div class="sm:text-right">
-          <p class="text-xs uppercase tracking-wider text-slate-400">Estimated Timeline</p>
+          <p class="text-xs uppercase tracking-wider text-slate-400">Target Delivery</p>
           <p id="timeline-value" class="text-xl font-bold text-white mt-1"></p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Contact Proposal Form -->
-  <section id="contact" class="py-16 px-5 max-w-4xl mx-auto">
+  <!-- FAQ Section -->
+  <section class="py-16 px-4 max-w-4xl mx-auto border-t border-slate-900">
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <span class="text-cyan-400 font-bold text-xs uppercase tracking-widest">Common Inquiries</span>
+      <h2 class="text-3xl font-black text-white mt-2">Frequently Asked Questions</h2>
+    </div>
+
+    <div class="space-y-4 text-sm">
+      <div class="glass-card p-5 rounded-xl">
+        <h4 class="font-bold text-white">How do we retain code ownership and deployment secrets?</h4>
+        <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">Full IP, source code, and deployment scripts are transferred upon handover. Code repositories remain within client-controlled GitHub or GitLab organizations.</p>
+      </div>
+      <div class="glass-card p-5 rounded-xl">
+        <h4 class="font-bold text-white">What backend frameworks do you employ for enterprise services?</h4>
+        <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">We specialize in Python (FastAPI and Django), complemented by PostgreSQL, Redis caches, and Docker container architectures.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact & Proposal Section -->
+  <section id="contact" class="py-16 px-4 max-w-4xl mx-auto">
     <div class="glass-panel p-6 sm:p-10 rounded-3xl border border-slate-800 shadow-2xl">
       <div class="max-w-xl">
         <span class="text-emerald-400 font-bold text-xs uppercase tracking-widest">Get Proposal</span>
-        <h2 class="text-2xl sm:text-3xl font-black text-white mt-1">Start a Conversation</h2>
-        <p class="text-slate-400 text-xs sm:text-sm mt-2">Submit your project details to log your ticket in the internal dashboard.</p>
+        <h2 class="text-2xl sm:text-3xl font-black text-white mt-1">Start Engineering Consultation</h2>
+        <p class="text-slate-400 text-xs sm:text-sm mt-2">Submit project requirements directly to our leads dashboard.</p>
       </div>
 
       <form id="contact-form" class="mt-8 space-y-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Name</label>
-            <input type="text" id="contact-name" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-sm focus:border-cyan-400 text-white outline-none" placeholder="Your Name" />
+            <input type="text" id="contact-name" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-sm text-white outline-none focus:border-cyan-400" placeholder="e.g. Anand Varma" />
           </div>
           <div>
-            <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Corporate Email</label>
-            <input type="email" id="contact-email" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-sm focus:border-cyan-400 text-white outline-none" placeholder="name@company.com" />
+            <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Work Email</label>
+           <input type="email" id="contact-email" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-sm text-white outline-none focus:border-cyan-400" placeholder="name@company.com" />
           </div>
         </div>
 
         <div>
-          <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Service Required</label>
-          <select id="contact-service" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-sm focus:border-cyan-400 text-white outline-none">
+          <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Practice Area</label>
+          <select id="contact-service" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-sm text-white outline-none focus:border-cyan-400">
             <option value="Full-Stack Web Development">Full-Stack Web Development</option>
-            <option value="ERP / CRM Solutions">ERP / CRM Solutions</option>
+            <option value="ERP & CRM Solutions">ERP & CRM Solutions</option>
             <option value="SaaS Architecture">SaaS Architecture</option>
-            <option value="Cloud & DevOps Architecture">Cloud & DevOps Architecture</option>
+            <option value="Cloud Infrastructure">Cloud Infrastructure & DevOps</option>
           </select>
         </div>
 
         <div>
-          <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Requirements</label>
-          <textarea id="contact-message" rows="4" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-sm focus:border-cyan-400 text-white outline-none" placeholder="Brief overview of goals, timeline, and deliverables..."></textarea>
+          <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Scope Details</label>
+          <textarea id="contact-message" rows="4" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-sm text-white outline-none focus:border-cyan-400" placeholder="Detail your project requirements, target launch window, and integration points..."></textarea>
         </div>
 
         <button type="submit" id="contact-submit-btn" class="w-full py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition">
@@ -384,15 +377,65 @@
     </div>
   </section>
 
+  <!-- Login & Register Modal -->
+  <div id="auth-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="glass-panel max-w-md w-full p-6 sm:p-8 rounded-2xl border border-slate-700 shadow-2xl relative">
+      <button id="close-auth-modal" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <div class="flex gap-4 border-b border-slate-800 pb-3 mb-6">
+        <button id="tab-login" class="text-sm font-bold text-cyan-400 pb-2 border-b-2 border-cyan-400">Sign In</button>
+        <button id="tab-register" class="text-sm font-bold text-slate-400 pb-2">Create Account</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="form-login" class="space-y-4">
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Email</label>
+          <input type="email" id="login-email" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-white outline-none focus:border-cyan-400" placeholder="you@company.com" />
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Password</label>
+          <input type="password" id="login-password" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-white outline-none focus:border-cyan-400" placeholder="••••••••" />
+        </div>
+        <button type="submit" class="w-full py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm">
+          Authenticate
+        </button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="form-register" class="space-y-4 hidden">
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Full Name</label>
+          <input type="text" id="reg-name" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-white outline-none focus:border-cyan-400" placeholder="Your Name" />
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Corporate Email</label>
+          <input type="email" id="reg-email" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-white outline-none focus:border-cyan-400" placeholder="you@company.com" />
+        </div>
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Password</label>
+          <input type="password" id="reg-password" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-white outline-none focus:border-cyan-400" placeholder="••••••••" />
+        </div>
+        <button type="submit" class="w-full py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm">
+          Register New Account
+        </button>
+      </form>
+
+      <div id="auth-error" class="hidden mt-4 p-3 rounded-lg bg-rose-950/80 text-rose-400 text-xs text-center border border-rose-800/50"></div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="py-12 border-t border-slate-900 bg-slate-950 text-xs text-slate-500">
-    <div class="max-w-7xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <p>© 2026 Nexora Technologies. Next-Gen Enterprise Platforms.</p>
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p>© 2026 Nexora Technologies. Next-Gen Enterprise Software Engineering.</p>
       <div class="flex space-x-6">
         <a href="#services" class="hover:text-cyan-400 transition">Services</a>
         <a href="#portfolio" class="hover:text-cyan-400 transition">Portfolio</a>
+        <a href="#techstack" class="hover:text-cyan-400 transition">Stack</a>
         <a href="#estimator" class="hover:text-cyan-400 transition">Estimator</a>
-        <a href="#contact" class="hover:text-cyan-400 transition">Get Proposal</a>
       </div>
     </div>
   </footer>
@@ -402,112 +445,224 @@
       ? "http://127.0.0.1:8000"
       : "https://nexora-backend-4ijr.onrender.com";
 
-    // 1. Mobile Drawer Toggle
+    // --- Drawer Toggle ---
     const openBtn = document.getElementById('open-menu-btn');
     const closeBtn = document.getElementById('close-menu-btn');
     const drawer = document.getElementById('mobile-drawer');
 
-    function openDrawer() {
-      drawer.classList.remove('closed');
-      drawer.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
+    openBtn.addEventListener('click', () => { drawer.classList.remove('closed'); drawer.classList.add('open'); });
+    closeBtn.addEventListener('click', () => { drawer.classList.remove('open'); drawer.classList.add('closed'); });
+    document.querySelectorAll('.drawer-link').forEach(l => l.addEventListener('click', () => { drawer.classList.remove('open'); drawer.classList.add('closed'); }));
 
-    function closeDrawer() {
-      drawer.classList.remove('open');
-      drawer.classList.add('closed');
-      document.body.style.overflow = 'auto';
-    }
+    // --- Authentication & Client Portal ---
+    const authModal = document.getElementById('auth-modal');
+    const openAuthBtn = document.getElementById('open-auth-btn');
+    const mobileAuthBtn = document.getElementById('mobile-auth-btn');
+    const closeAuthBtn = document.getElementById('close-auth-modal');
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const formLogin = document.getElementById('form-login');
+    const formRegister = document.getElementById('form-register');
+    const authError = document.getElementById('auth-error');
 
-    openBtn.addEventListener('click', openDrawer);
-    closeBtn.addEventListener('click', closeDrawer);
+    function showAuthModal() { authModal.classList.remove('hidden'); }
+    function hideAuthModal() { authModal.classList.add('hidden'); authError.classList.add('hidden'); }
 
-    document.querySelectorAll('.drawer-link').forEach(link => {
-      link.addEventListener('click', closeDrawer);
+    openAuthBtn?.addEventListener('click', showAuthModal);
+    mobileAuthBtn?.addEventListener('click', () => { drawer.classList.remove('open'); drawer.classList.add('closed'); showAuthModal(); });
+    closeAuthBtn?.addEventListener('click', hideAuthModal);
+
+    tabLogin.addEventListener('click', () => {
+      tabLogin.className = "text-sm font-bold text-cyan-400 pb-2 border-b-2 border-cyan-400";
+      tabRegister.className = "text-sm font-bold text-slate-400 pb-2";
+      formLogin.classList.remove('hidden');
+      formRegister.classList.add('hidden');
     });
 
-    // 2. Portfolio Category Filter
-    const filterButtons = document.querySelectorAll('.portfolio-filter');
-    const portfolioItems = document.querySelectorAll('.portfolio-item');
-
-    filterButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterButtons.forEach(b => {
-          b.classList.remove('bg-cyan-500', 'text-slate-950');
-          b.classList.add('bg-slate-900', 'text-slate-300');
-        });
-        btn.classList.add('bg-cyan-500', 'text-slate-950');
-        btn.classList.remove('bg-slate-900', 'text-slate-300');
-
-        const filter = btn.getAttribute('data-filter');
-        portfolioItems.forEach(item => {
-          if (filter === 'all' || item.getAttribute('data-category') === filter) {
-            item.style.display = 'flex';
-          } else {
-            item.style.display = 'none';
-          }
-        });
-      });
+    tabRegister.addEventListener('click', () => {
+      tabRegister.className = "text-sm font-bold text-cyan-400 pb-2 border-b-2 border-cyan-400";
+      tabLogin.className = "text-sm font-bold text-slate-400 pb-2";
+      formRegister.classList.remove('hidden');
+      formLogin.classList.add('hidden');
     });
 
-    // 3. Dynamic Services Fetch (With local fallback)
-    const fallbackServices = [
-      { title: "Custom Web Applications", desc: "Production-ready platforms built with Python/FastAPI, modern microservices, and reactive frontends." },
-      { title: "ERP & CRM Implementations", desc: "Tailored enterprise solutions to automate core operations, inventory, and cross-team communications." },
-      { title: "SaaS Architecture & APIs", desc: "Multi-tenant platforms engineered with strict tenancy isolation, token auth, and billing integration." }
-    ];
-
-    async function loadServices() {
-      const container = document.getElementById('services-container');
+    formLogin.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      authError.classList.add('hidden');
       try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 4000);
-        const res = await fetch(`${API_BASE_URL}/api/services`, { signal: controller.signal });
-        clearTimeout(timeoutId);
-        if (!res.ok) throw new Error("Fallback needed");
-        const services = await res.json();
-        renderServices(services);
+        const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: document.getElementById('login-email').value,
+            password: document.getElementById('login-password').value
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Authentication failure");
+        localStorage.setItem('nexora_token', data.token);
+        hideAuthModal();
+        checkSession();
       } catch (err) {
-        renderServices(fallbackServices);
+        authError.textContent = err.message;
+        authError.classList.remove('hidden');
+      }
+    });
+
+    formRegister.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      authError.classList.add('hidden');
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            full_name: document.getElementById('reg-name').value,
+            email: document.getElementById('reg-email').value,
+            password: document.getElementById('reg-password').value
+          })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Registration failed");
+        localStorage.setItem('nexora_token', data.token);
+        hideAuthModal();
+        checkSession();
+      } catch (err) {
+        authError.textContent = err.message;
+        authError.classList.remove('hidden');
+      }
+    });
+
+    async function checkSession() {
+      const token = localStorage.getItem('nexora_token');
+      const portalBanner = document.getElementById('client-portal-banner');
+      const authNavContainer = document.getElementById('auth-nav-container');
+
+      if (!token) {
+        portalBanner.classList.add('hidden');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/auth/me`, {
+          headers: { 'X-Auth-Token': token }
+        });
+        if (!res.ok) throw new Error("Expired");
+        const data = await res.json();
+        
+        document.getElementById('portal-user-name').textContent = data.user.full_name;
+        document.getElementById('portal-user-email').textContent = data.user.email;
+        document.getElementById('portal-tickets-count').textContent = `${data.my_inquiries.length} Inquiries Logged`;
+        portalBanner.classList.remove('hidden');
+
+        // Pre-fill contact form
+        const nameInput = document.getElementById('contact-name');
+        const emailInput = document.getElementById('contact-email');
+        if (nameInput) nameInput.value = data.user.full_name;
+        if (emailInput) emailInput.value = data.user.email;
+
+      } catch (err) {
+        localStorage.removeItem('nexora_token');
+        portalBanner.classList.add('hidden');
       }
     }
 
-    function renderServices(services) {
-      const container = document.getElementById('services-container');
-      container.innerHTML = services.map(s => `
-        <div class="glass-card p-6 rounded-2xl hover:border-cyan-500/50 transition">
-          <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-800/60 flex items-center justify-center text-cyan-400 mb-4">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-            </svg>
-          </div>
-          <h3 class="text-lg font-bold text-white mb-2">${s.title}</h3>
-          <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">${s.desc}</p>
-        </div>
-      `).join('');
-    }
-
-    // 4. Estimator
-    const pagesInput = document.getElementById('pages-count');
-    const pagesDisplay = document.getElementById('pages-display');
-    pagesInput.addEventListener('input', (e) => {
-      pagesDisplay.textContent = e.target.value;
+    document.getElementById('logout-btn')?.addEventListener('click', () => {
+      localStorage.removeItem('nexora_token');
+      checkSession();
     });
 
-    document.getElementById('estimator-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const payload = {
-        project_type: document.getElementById('project-type').value,
-        pages_count: parseInt(pagesInput.value, 10),
-        needs_auth: document.getElementById('auth-needed').checked,
-        needs_payment_gateway: document.getElementById('payment-needed').checked
-      };
+    // --- Dynamic Portfolio Loading ---
+    async function loadPortfolio() {
+      const container = document.getElementById('portfolio-container');
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/portfolio`);
+        const projects = res.ok ? await res.json() : [];
+        if (!projects.length) throw new Error("Empty portfolio");
+        
+        container.innerHTML = projects.map(p => `
+          <div class="portfolio-item glass-card rounded-2xl overflow-hidden border border-slate-800 flex flex-col" data-category="${p.category}">
+            <div class="h-44 bg-cover bg-center" style="background-image: url('${p.image}');">
+              <div class="w-full h-full bg-slate-950/40 p-4 flex items-start justify-between">
+                <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-950/80 text-cyan-400 border border-slate-700">${p.tag}</span>
+              </div>
+            </div>
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 class="text-lg font-bold text-white mb-2">${p.title}</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">${p.desc}</p>
+              </div>
+              <div class="mt-4 pt-4 border-t border-slate-800 flex items-center justify-between text-xs">
+                <span class="text-emerald-400 font-semibold">${p.stat}</span>
+                <span class="text-slate-500">${p.tech}</span>
+              </div>
+            </div>
+          </div>
+        `).join('');
 
+        setupPortfolioFilters();
+      } catch (err) {
+        container.innerHTML = `<p class="text-slate-500 text-xs col-span-full text-center">Portfolio dynamically populated upon connection.</p>`;
+      }
+    }
+
+    function setupPortfolioFilters() {
+      const filters = document.querySelectorAll('.portfolio-filter');
+      const items = document.querySelectorAll('.portfolio-item');
+      filters.forEach(f => {
+        f.addEventListener('click', () => {
+          filters.forEach(btn => {
+            btn.classList.remove('bg-cyan-500', 'text-slate-950');
+            btn.classList.add('bg-slate-900', 'text-slate-300');
+          });
+          f.classList.add('bg-cyan-500', 'text-slate-950');
+          f.classList.remove('bg-slate-900', 'text-slate-300');
+
+          const val = f.getAttribute('data-filter');
+          items.forEach(it => {
+            it.style.display = (val === 'all' || it.getAttribute('data-category') === val) ? 'flex' : 'none';
+          });
+        });
+      });
+    }
+
+    // --- Dynamic Services Loading ---
+    async function loadServices() {
+      const container = document.getElementById('services-container');
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/services`);
+        const services = await res.json();
+        container.innerHTML = services.map(s => `
+          <div class="glass-card p-6 rounded-2xl hover:border-cyan-500/40 transition">
+            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-800/60 flex items-center justify-center text-cyan-400 mb-4">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <h3 class="text-base font-bold text-white mb-2">${s.title}</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">${s.desc}</p>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.warn("Services fallback active");
+      }
+    }
+
+    // --- Estimator ---
+    const pagesInput = document.getElementById('pages-count');
+    const pagesDisplay = document.getElementById('pages-display');
+    pagesInput?.addEventListener('input', (e) => { pagesDisplay.textContent = e.target.value; });
+
+    document.getElementById('estimator-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
       try {
         const res = await fetch(`${API_BASE_URL}/api/estimate`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify({
+            project_type: document.getElementById('project-type').value,
+            pages_count: parseInt(pagesInput.value, 10),
+            needs_auth: document.getElementById('auth-needed').checked,
+            needs_payment_gateway: document.getElementById('payment-needed').checked
+          })
         });
         const data = await res.json();
         document.getElementById('cost-value').textContent = '₹' + data.estimated_price_inr.toLocaleString('en-IN');
@@ -518,38 +673,34 @@
       }
     });
 
-    // 5. Contact Form
-    document.getElementById('contact-form').addEventListener('submit', async (e) => {
+    // --- Contact Form ---
+    document.getElementById('contact-form')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('contact-submit-btn');
       const alertBox = document.getElementById('contact-alert');
       btn.disabled = true;
       btn.textContent = 'Transmitting Proposal...';
 
-      const payload = {
-        name: document.getElementById('contact-name').value,
-        email: document.getElementById('contact-email').value,
-        service_interested: document.getElementById('contact-service').value,
-        message: document.getElementById('contact-message').value
-      };
-
       try {
         const res = await fetch(`${API_BASE_URL}/api/contact`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+          body: JSON.stringify({
+            name: document.getElementById('contact-name').value,
+            email: document.getElementById('contact-email').value,
+            service_interested: document.getElementById('contact-service').value,
+            message: document.getElementById('contact-message').value
+          })
         });
-        
-        if (!res.ok) throw new Error("Submission error");
         const result = await res.json();
-        
-        alertBox.className = 'mt-6 p-4 rounded-xl text-sm text-center bg-emerald-950/80 text-emerald-400 border border-emerald-600/40';
+        alertBox.className = 'mt-6 p-4 rounded-xl text-xs text-center bg-emerald-950/80 text-emerald-400 border border-emerald-600/40';
         alertBox.textContent = result.message;
         alertBox.classList.remove('hidden');
         document.getElementById('contact-form').reset();
+        checkSession();
       } catch (err) {
-        alertBox.className = 'mt-6 p-4 rounded-xl text-sm text-center bg-rose-950/80 text-rose-400 border border-rose-600/40';
-        alertBox.textContent = 'Backend is warming up. Please wait 10 seconds and submit again.';
+        alertBox.className = 'mt-6 p-4 rounded-xl text-xs text-center bg-rose-950/80 text-rose-400 border border-rose-600/40';
+        alertBox.textContent = 'Server busy waking up. Please retry in a few seconds.';
         alertBox.classList.remove('hidden');
       } finally {
         btn.disabled = false;
@@ -557,6 +708,9 @@
       }
     });
 
+    // Initialize all dynamic modules
+    checkSession();
+    loadPortfolio();
     loadServices();
   </script>
 </body>

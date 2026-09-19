@@ -1,261 +1,229 @@
-import os
-import datetime
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from typing import Optional, List
-
-from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Query, Security, status
+import sqlite3
+import hashlib
+import secrets
+from typing import List, Optional
+from fastapi import FastAPI, HTTPException, Header, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import APIKeyHeader
 from pydantic import BaseModel, EmailStr
-from sqlalchemy import Column, DateTime, Integer, String, Text, create_engine
-from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
-# --- Configuration & Security ---
-ADMIN_SECRET_KEY = os.getenv("ADMIN_SECRET_KEY", "nexora_admin_secret_2026")
-api_key_header = APIKeyHeader(name="X-Admin-Key", auto_error=False)
+app = FastAPI(title="Nexora Enterprise API", version="2.0.0")
 
-SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
-SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
-SENDER_EMAIL = os.getenv("SENDER_EMAIL", "your-email@gmail.com")
-SENDER_PASSWORD = os.getenv("SENDER_PASSWORD", "your-app-password")
-ADMIN_NOTIFICATION_RECEIVER = os.getenv("ADMIN_NOTIFICATION_RECEIVER", "your-email@gmail.com")
-
-# --- Database Setup (SQLite) ---
-DATABASE_URL = "sqlite:///./nexora.db"
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-class Base(DeclarativeBase):
-    pass
-
-class ContactLead(Base):
-    __tablename__ = "contact_leads"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(100), nullable=False)
-    email = Column(String(100), nullable=False)
-    service_interested = Column(String(100), nullable=False)
-    message = Column(Text, nullable=False)
-    status = Column(String(50), default="New")  # New, Contacted, In Progress, Closed
-    created_at = Column(DateTime, default=lambda: datetime.datetime.now(datetime.timezone.utc))
-
-Base.metadata.create_all(bind=engine)
-
-# --- Pydantic Schemas ---
-class ContactMessage(BaseModel):
-    name: str
-    email: EmailStr
-    service_interested: str
-    message: str
-
-class LeadResponse(BaseModel):
-    id: int
-    name: str
-    email: str
-    service_interested: str
-    message: str
-    status: str
-    created_at: datetime.datetime
-
-    class Config:
-        from_attributes = True
-
-class LeadStatusUpdate(BaseModel):
-    status: str
-
-class QuoteRequest(BaseModel):
-    project_type: str
-    pages_count: int
-    needs_auth: bool
-    needs_payment_gateway: bool
-
-# --- FastAPI Initialization ---
-app = FastAPI(
-    title="Nexora API",
-    version="1.2.0",
-    description="Full-featured API backend for Nexora IT platform"
-)
-
-# CORS Configuration
-origins = [
-    "https://nexora-frontend-iqem.onrender.com",
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "http://localhost:5500",
-    "http://127.0.0.1:5500",
-    "*"
-]
-
+# Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# --- Dependencies ---
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+DB_PATH = "backend/nexora.db"
 
-def verify_admin(api_key: str = Security(api_key_header)):
-    if api_key != ADMIN_SECRET_KEY:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Unauthorized: Invalid or missing Admin Key"
+def hash_password(password: str, salt: str) -> str:
+    return hashlib.sha256((password + salt).encode('utf-8')).hexdigest()
+
+def init_db():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    # Inquiries table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS inquiries (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            service_interested TEXT NOT NULL,
+            message TEXT NOT NULL,
+            status TEXT DEFAULT 'New',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
-    return api_key
+    """)
+    # Users table for client/admin login
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            full_name TEXT NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            salt TEXT NOT NULL,
+            hashed_password TEXT NOT NULL,
+            role TEXT DEFAULT 'client',
+            session_token TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    conn.commit()
+    conn.close()
 
-# --- Helper Functions ---
-def send_lead_notification_email(lead_name: str, lead_email: str, service: str, message: str):
-    # Skip execution if default dummy credentials are in place
-    if SENDER_PASSWORD == "your-app-password":
-        print("[Notice] SMTP password not set. Skipping lead email alert.")
-        return
+init_db()
 
-    try:
-        msg = MIMEMultipart()
-        msg["From"] = SENDER_EMAIL
-        msg["To"] = ADMIN_NOTIFICATION_RECEIVER
-        msg["Subject"] = f"New Lead Captured: {lead_name} ({service})"
+# --- Pydantic Schemas ---
+class UserRegister(BaseModel):
+    full_name: str
+    email: EmailStr
+    password: str
 
-        body = f"""New inquiry captured:
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
 
-Name: {lead_name}
-Email: {lead_email}
-Service: {service}
-Message:
-{message}
-"""
-        msg.attach(MIMEText(body, "plain"))
+class ContactRequest(BaseModel):
+    name: str
+    email: EmailStr
+    service_interested: str
+    message: str
 
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-            server.starttls()
-            server.login(SENDER_EMAIL, SENDER_PASSWORD)
-            server.send_message(msg)
-    except Exception as e:
-        print(f"Background email notification failed: {e}")
+class EstimateRequest(BaseModel):
+    project_type: str
+    pages_count: int
+    needs_auth: bool
+    needs_payment_gateway: bool
 
-# --- Public Endpoints ---
+# --- Helpers ---
+def get_user_by_token(token: Optional[str] = Header(None, alias="X-Auth-Token")):
+    if not token:
+        return None
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, full_name, email, role FROM users WHERE session_token = ?", (token,))
+    row = cursor.fetchone()
+    conn.close()
+    if row:
+        return {"id": row[0], "full_name": row[1], "email": row[2], "role": row[3]}
+    return None
+
+# --- Routes ---
 
 @app.get("/")
-def read_root():
-    return {"status": "success", "message": "Nexora backend is live"}
+def root():
+    return {"status": "online", "system": "Nexora Production Engine v2.0"}
 
-@app.get("/health")
-def health_check():
-    return {"status": "healthy"}
+# Authentication Endpoints
+@app.post("/api/auth/register")
+def register(user: UserRegister):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    salt = secrets.token_hex(16)
+    hashed_pwd = hash_password(user.password, salt)
+    token = secrets.token_hex(24)
+    try:
+        cursor.execute(
+            "INSERT INTO users (full_name, email, salt, hashed_password, session_token) VALUES (?, ?, ?, ?, ?)",
+            (user.full_name, user.email.lower(), salt, hashed_pwd, token)
+        )
+        conn.commit()
+        user_id = cursor.lastrowid
+        conn.close()
+        return {
+            "token": token,
+            "user": {"id": user_id, "full_name": user.full_name, "email": user.email, "role": "client"}
+        }
+    except sqlite3.IntegrityError:
+        conn.close()
+        raise HTTPException(status_code=400, detail="Account with this email already exists.")
 
+@app.post("/api/auth/login")
+def login(creds: UserLogin):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, full_name, email, salt, hashed_password, role FROM users WHERE email = ?", (creds.email.lower(),))
+    row = cursor.fetchone()
+    if not row:
+        conn.close()
+        raise HTTPException(status_code=401, detail="Invalid email or password.")
+    
+    user_id, name, email, salt, stored_hash, role = row
+    if hash_password(creds.password, salt) != stored_hash:
+        conn.close()
+        raise HTTPException(status_code=401, detail="Invalid email or password.")
+    
+    token = secrets.token_hex(24)
+    cursor.execute("UPDATE users SET session_token = ? WHERE id = ?", (token, user_id))
+    conn.commit()
+    conn.close()
+    return {
+        "token": token,
+        "user": {"id": user_id, "full_name": name, "email": email, "role": role}
+    }
+
+@app.get("/api/auth/me")
+def get_current_session(user: dict = Depends(get_user_by_token)):
+    if not user:
+        raise HTTPException(status_code=401, detail="Session expired or invalid.")
+    
+    # Also fetch client's submitted inquiries
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, service_interested, status, created_at FROM inquiries WHERE email = ? ORDER BY id DESC", (user["email"],))
+    inquiries = [{"id": r[0], "service": r[1], "status": r[2], "date": r[3]} for r in cursor.fetchall()]
+    conn.close()
+    
+    return {"user": user, "my_inquiries": inquiries}
+
+# Services Catalog
 @app.get("/api/services")
 def get_services():
     return [
+        {"title": "Custom Web Applications", "desc": "Production-grade microservices and single-page apps engineered with Python/FastAPI, modern UI paradigms, and asynchronous task workers."},
+        {"title": "Bespoke ERP & CRM Engines", "desc": "Centralized workflow orchestration, relational database optimization, inventory pipelines, and permission matrices."},
+        {"title": "SaaS Engineering & API Ecosystems", "desc": "Multi-tenant platforms with isolated data pipelines, secure Stripe billing integration, and sub-100ms REST/GraphQL endpoints."},
+        {"title": "Cloud Infrastructure & DevOps", "desc": "Dockerized CI/CD pipelines, container orchestration, SSL/TLS zero-trust configuration, and real-time APM telemetry."}
+    ]
+
+# Dynamic Portfolio Case Studies
+@app.get("/api/portfolio")
+def get_portfolio():
+    return [
         {
             "id": 1,
-            "title": "Full-Stack Web Development",
-            "desc": "Scalable modern web apps built with Python FastAPI and reactive frontends."
+            "title": "OmniFlow Real Estate CRM",
+            "category": "erp",
+            "tag": "ERP / CRM",
+            "image": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+            "desc": "Automated inventory management and lead conversion platform with multi-tiered agent commission matrices.",
+            "stat": "+40% Conversion Velocity",
+            "tech": "FastAPI • PostgreSQL • Vue"
         },
         {
             "id": 2,
-            "title": "Cloud & DevOps Architecture",
-            "desc": "Containerized deployments, automated CI/CD pipelines, and cloud infrastructure management."
+            "title": "Vanguard Cloud Analytics",
+            "category": "saas",
+            "tag": "SaaS Platform",
+            "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
+            "desc": "High-throughput telemetry ingestion platform processing over 10,000 telemetry events per second.",
+            "stat": "< 80ms P95 Latency",
+            "tech": "Python • TimescaleDB • Redis"
         },
         {
             "id": 3,
-            "title": "Corporate IT Training",
-            "desc": "Hands-on, industry-grade training covering modern Python stacks and microservices."
+            "title": "PrimeSupply B2B Commerce",
+            "category": "web",
+            "tag": "Web Architecture",
+            "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+            "desc": "Enterprise wholesale ordering system with real-time tax calculation, custom invoicing, and multi-currency checkout.",
+            "stat": "99.99% Checkout Uptime",
+            "tech": "FastAPI • React • Docker"
         }
     ]
 
+# Estimator Endpoint
 @app.post("/api/estimate")
-def estimate_cost(quote: QuoteRequest):
-    base_price = 15000  # Base cost in INR
-    price = base_price + (quote.pages_count * 2000)
+def calculate_estimate(data: EstimateRequest):
+    base_cost = {"Web App": 25000, "Mobile App": 35000, "Enterprise Architecture": 60000}.get(data.project_type, 30000)
+    pages_cost = data.pages_count * 2500
+    auth_cost = 8000 if data.needs_auth else 0
+    payment_cost = 10000 if data.needs_payment_gateway else 0
+    total = base_cost + pages_cost + auth_cost + payment_cost
+    weeks = max(2, round(data.pages_count * 0.4 + (2 if data.needs_auth else 0) + (1.5 if data.needs_payment_gateway else 0)))
+    return {"estimated_price_inr": total, "delivery_timeline_weeks": weeks}
 
-    if quote.needs_auth:
-        price += 8000
-    if quote.needs_payment_gateway:
-        price += 10000
-
-    timeline = 2 + (quote.pages_count // 3)
-
-    return {
-        "estimated_price_inr": price,
-        "delivery_timeline_weeks": timeline
-    }
-
+# Contact / Inquiry Endpoint
 @app.post("/api/contact")
-def submit_contact(
-    data: ContactMessage,
-    background_tasks: BackgroundTasks,
-    db: Session = Depends(get_db)
-):
-    new_lead = ContactLead(
-        name=data.name,
-        email=data.email,
-        service_interested=data.service_interested,
-        message=data.message,
-        status="New"
+def create_contact(inquiry: ContactRequest):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO inquiries (name, email, service_interested, message) VALUES (?, ?, ?, ?)",
+        (inquiry.name, inquiry.email, inquiry.service_interested, inquiry.message)
     )
-    db.add(new_lead)
-    db.commit()
-    db.refresh(new_lead)
-
-    background_tasks.add_task(
-        send_lead_notification_email,
-        data.name,
-        data.email,
-        data.service_interested,
-        data.message
-    )
-
-    return {
-        "status": "success",
-        "message": "Query saved successfully. Our team will contact you shortly!",
-        "lead_id": new_lead.id
-    }
-
-# --- Protected Admin Endpoints ---
-
-@app.get("/api/admin/leads", response_model=List[LeadResponse], dependencies=[Depends(verify_admin)])
-def get_leads(
-    status: Optional[str] = Query(None, description="Filter leads by status: New, Contacted, Closed"),
-    db: Session = Depends(get_db)
-):
-    query = db.query(ContactLead)
-    if status:
-        query = query.filter(ContactLead.status == status)
-    return query.order_by(ContactLead.id.desc()).all()
-
-@app.patch("/api/admin/leads/{lead_id}", dependencies=[Depends(verify_admin)])
-def update_lead_status(
-    lead_id: int,
-    payload: LeadStatusUpdate,
-    db: Session = Depends(get_db)
-):
-    lead = db.query(ContactLead).filter(ContactLead.id == lead_id).first()
-    if not lead:
-        raise HTTPException(status_code=404, detail="Lead not found")
-
-    lead.status = payload.status
-    db.commit()
-    db.refresh(lead)
-    return {"status": "success", "message": f"Lead #{lead_id} updated to {payload.status}"}
-
-@app.delete("/api/admin/leads/{lead_id}", dependencies=[Depends(verify_admin)])
-def delete_lead(
-    lead_id: int,
-    db: Session = Depends(get_db)
-):
-    lead = db.query(ContactLead).filter(ContactLead.id == lead_id).first()
-    if not lead:
-        raise HTTPException(status_code=404, detail="Lead not found")
-
-    db.delete(lead)
-    db.commit()
-    return {"status": "success", "message": f"Lead #{lead_id} removed permanently"}
+    conn.commit()
+    conn.close()
+    return {"status": "success", "message": "Inquiry recorded successfully. Our solutions team will review and contact you."}
