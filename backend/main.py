@@ -1,3 +1,4 @@
+import os
 import sqlite3
 import hashlib
 import secrets
@@ -17,7 +18,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-DB_PATH = "backend/nexora.db"
+# Robust dynamic absolute path resolution for SQLite database
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "nexora.db")
 
 def hash_password(password: str, salt: str) -> str:
     return hashlib.sha256((password + salt).encode('utf-8')).hexdigest()
@@ -53,6 +56,7 @@ def init_db():
     conn.commit()
     conn.close()
 
+# Initialize DB tables on startup
 init_db()
 
 # --- Pydantic Schemas ---
@@ -77,7 +81,7 @@ class EstimateRequest(BaseModel):
     needs_auth: bool
     needs_payment_gateway: bool
 
-# --- Helpers ---
+# --- Authentication Helpers ---
 def get_user_by_token(token: Optional[str] = Header(None, alias="X-Auth-Token")):
     if not token:
         return None
@@ -90,13 +94,13 @@ def get_user_by_token(token: Optional[str] = Header(None, alias="X-Auth-Token"))
         return {"id": row[0], "full_name": row[1], "email": row[2], "role": row[3]}
     return None
 
-# --- Routes ---
+# --- API Endpoints ---
 
 @app.get("/")
 def root():
     return {"status": "online", "system": "Nexora Production Engine v2.0"}
 
-# Authentication Endpoints
+# 1. Auth Endpoints
 @app.post("/api/auth/register")
 def register(user: UserRegister):
     conn = sqlite3.connect(DB_PATH)
@@ -118,7 +122,7 @@ def register(user: UserRegister):
         }
     except sqlite3.IntegrityError:
         conn.close()
-        raise HTTPException(status_code=400, detail="Account with this email already exists.")
+        raise HTTPException(status_code=400, detail="An account with this email already exists.")
 
 @app.post("/api/auth/login")
 def login(creds: UserLogin):
@@ -149,7 +153,6 @@ def get_current_session(user: dict = Depends(get_user_by_token)):
     if not user:
         raise HTTPException(status_code=401, detail="Session expired or invalid.")
     
-    # Also fetch client's submitted inquiries
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute("SELECT id, service_interested, status, created_at FROM inquiries WHERE email = ? ORDER BY id DESC", (user["email"],))
@@ -158,7 +161,7 @@ def get_current_session(user: dict = Depends(get_user_by_token)):
     
     return {"user": user, "my_inquiries": inquiries}
 
-# Services Catalog
+# 2. Services Endpoint
 @app.get("/api/services")
 def get_services():
     return [
@@ -168,7 +171,7 @@ def get_services():
         {"title": "Cloud Infrastructure & DevOps", "desc": "Dockerized CI/CD pipelines, container orchestration, SSL/TLS zero-trust configuration, and real-time APM telemetry."}
     ]
 
-# Dynamic Portfolio Case Studies
+# 3. Dynamic Portfolio Endpoints
 @app.get("/api/portfolio")
 def get_portfolio():
     return [
@@ -204,7 +207,7 @@ def get_portfolio():
         }
     ]
 
-# Estimator Endpoint
+# 4. Scope & Cost Estimator Endpoint
 @app.post("/api/estimate")
 def calculate_estimate(data: EstimateRequest):
     base_cost = {"Web App": 25000, "Mobile App": 35000, "Enterprise Architecture": 60000}.get(data.project_type, 30000)
@@ -215,7 +218,7 @@ def calculate_estimate(data: EstimateRequest):
     weeks = max(2, round(data.pages_count * 0.4 + (2 if data.needs_auth else 0) + (1.5 if data.needs_payment_gateway else 0)))
     return {"estimated_price_inr": total, "delivery_timeline_weeks": weeks}
 
-# Contact / Inquiry Endpoint
+# 5. Lead Contact Submission Endpoint
 @app.post("/api/contact")
 def create_contact(inquiry: ContactRequest):
     conn = sqlite3.connect(DB_PATH)
