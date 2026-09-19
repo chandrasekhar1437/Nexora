@@ -1,113 +1,252 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nexora — Next-Gen Tech Solutions</title>
+  <title>Nexora — Scalable Cloud & Software Engineering</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    .glass-card {
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(12px);
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .hero-glow {
+      background: radial-gradient(circle 600px at 50% 20%, rgba(6, 182, 212, 0.15), transparent 70%);
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen">
+<body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-cyan-500 selection:text-slate-950">
 
-  <!-- Navbar -->
-  <nav class="flex items-center justify-between px-8 py-5 border-b border-slate-800 backdrop-blur-md sticky top-0 z-50 bg-slate-950/80">
-    <div class="text-2xl font-black tracking-wider text-cyan-400">NEXORA</div>
-    <div class="space-x-8 text-sm font-medium text-slate-300">
-      <a href="#services" class="hover:text-cyan-400 transition">Services</a>
-      <a href="#estimator" class="hover:text-cyan-400 transition">Price Estimator</a>
-      <a href="#contact" class="hover:text-cyan-400 transition">Contact</a>
+  <!-- Responsive Navigation -->
+  <nav class="sticky top-0 z-50 glass-panel border-b border-slate-800/80 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-2">
+          <span class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center font-black text-slate-950 text-base shadow-lg shadow-cyan-500/20">N</span>
+          <span class="text-xl sm:text-2xl font-black tracking-wider text-white">NEXORA</span>
+        </a>
+
+        <!-- Desktop Nav Links -->
+        <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+          <a href="#services" class="hover:text-cyan-400 transition">Services</a>
+          <a href="#process" class="hover:text-cyan-400 transition">Workflow</a>
+          <a href="#estimator" class="hover:text-cyan-400 transition">Estimator</a>
+          <a href="#contact" class="px-4 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold transition">Consult Us</a>
+        </div>
+
+        <!-- Mobile Menu Toggle Button -->
+        <div class="md:hidden flex items-center">
+          <button id="mobile-toggle" aria-label="Toggle Navigation" class="text-slate-300 hover:text-white p-2 rounded-lg focus:outline-none">
+            <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-800 px-4 pt-3 pb-6 space-y-3 bg-slate-950/95">
+      <a href="#services" class="mobile-nav-link block px-3 py-2 rounded-md text-base text-slate-300 hover:text-white hover:bg-slate-900">Services</a>
+      <a href="#process" class="mobile-nav-link block px-3 py-2 rounded-md text-base text-slate-300 hover:text-white hover:bg-slate-900">Workflow</a>
+      <a href="#estimator" class="mobile-nav-link block px-3 py-2 rounded-md text-base text-slate-300 hover:text-white hover:bg-slate-900">Cost Estimator</a>
+      <a href="#contact" class="mobile-nav-link block px-3 py-2 rounded-md text-base font-semibold text-cyan-400 bg-cyan-950/40 border border-cyan-800/50 text-center">Consult Us</a>
     </div>
   </nav>
 
   <!-- Hero Section -->
-  <header class="py-24 text-center px-4 max-w-4xl mx-auto">
-    <span class="text-xs uppercase tracking-widest text-cyan-400 bg-cyan-950/60 border border-cyan-700/50 px-3 py-1.5 rounded-full">
-      Engineering Next-Gen Systems
-    </span>
-    <h1 class="text-5xl md:text-6xl font-extrabold mt-6 tracking-tight leading-tight">
-      Transforming Vision Into High-Speed Reality.
-    </h1>
-    <p class="text-slate-400 mt-6 text-lg max-w-2xl mx-auto">
-      Scalable cloud architectures, production-ready full-stack systems, and hands-on developer training.
-    </p>
+  <header class="relative pt-20 pb-16 md:pt-32 md:pb-24 px-4 hero-glow overflow-hidden">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/70 border border-cyan-500/30 text-cyan-300 text-xs sm:text-sm font-medium mb-6">
+        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+        Enterprise Cloud & Full-Stack Solutions
+      </div>
+      <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight sm:leading-tight">
+        Architecting Systems That <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Outpace Complexity.</span>
+      </h1>
+      <p class="text-slate-400 mt-6 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+        Nexora engineers custom software platforms, cloud modernization architectures, and high-load web systems designed for operational resilience.
+      </p>
+      
+      <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#estimator" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition shadow-lg shadow-cyan-500/20 text-center">
+          Calculate Project Cost
+        </a>
+        <a href="#contact" class="w-full sm:w-auto px-6 py-3.5 rounded-xl glass-card hover:bg-slate-900 text-slate-200 border border-slate-700 font-semibold text-sm transition text-center">
+          Request Architecture Review
+        </a>
+      </div>
+    </div>
   </header>
 
-  <!-- Services (Backend Dynamic) -->
-  <section id="services" class="py-16 px-8 max-w-6xl mx-auto">
-    <h2 class="text-3xl font-bold mb-10 text-center">Core Capabilities</h2>
-    <div id="services-container" class="grid md:grid-cols-3 gap-8">
-      <p class="text-slate-500 text-center col-span-3">Loading services from backend...</p>
+  <!-- Key Metrics / Trust Signals -->
+  <section class="border-y border-slate-800/70 py-10 bg-slate-950/50">
+    <div class="max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div>
+        <p class="text-2xl sm:text-4xl font-extrabold text-cyan-400">99.98%</p>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1 uppercase tracking-wider">System Reliability</p>
+      </div>
+      <div>
+        <p class="text-2xl sm:text-4xl font-extrabold text-white">40+ Projects</p>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1 uppercase tracking-wider">Delivered On Spec</p>
+      </div>
+      <div>
+        <p class="text-2xl sm:text-4xl font-extrabold text-cyan-400">&lt; 150ms</p>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1 uppercase tracking-wider">Target API Latency</p>
+      </div>
+      <div>
+        <p class="text-2xl sm:text-4xl font-extrabold text-white">24/7</p>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1 uppercase tracking-wider">Deployment Monitoring</p>
+      </div>
     </div>
   </section>
 
-  <!-- Interactive Cost Estimator -->
-  <section id="estimator" class="py-16 px-8 max-w-3xl mx-auto">
-    <div class="glass-card p-8 rounded-2xl">
-      <h2 class="text-2xl font-bold mb-2 text-cyan-400">Instant Project Estimator</h2>
-      <p class="text-slate-400 text-sm mb-6">Select your specs to calculate an instant cost via FastAPI.</p>
+  <!-- Dynamic Services Catalog -->
+  <section id="services" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <span class="text-cyan-400 font-semibold text-xs tracking-widest uppercase">Service Capabilities</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2">End-to-End Technical Delivery</h2>
+    </div>
+    
+    <div id="services-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="glass-card p-6 rounded-2xl animate-pulse text-center col-span-full">
+        <p class="text-slate-500 text-sm">Syncing service definitions from Render backend...</p>
+      </div>
+    </div>
+  </section>
 
-      <form id="estimator-form" class="space-y-5">
+  <!-- Process Workflow Section -->
+  <section id="process" class="py-20 px-4 max-w-6xl mx-auto border-t border-slate-900">
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <span class="text-cyan-400 font-semibold text-xs tracking-widest uppercase">Methodology</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2">How We Build For Production</h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="glass-card p-6 rounded-xl border-slate-800">
+        <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">STAGE 01</span>
+        <h3 class="text-lg font-bold text-white mt-4">Discovery & Audit</h3>
+        <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">Deconstruct requirements, system constraints, API dependencies, and security vectors.</p>
+      </div>
+
+      <div class="glass-card p-6 rounded-xl border-slate-800">
+        <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">STAGE 02</span>
+        <h3 class="text-lg font-bold text-white mt-4">Architecture & Schema</h3>
+        <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">Establish database models, auth layers, CI/CD pipeline definitions, and cloud boundaries.</p>
+      </div>
+
+      <div class="glass-card p-6 rounded-xl border-slate-800">
+        <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">STAGE 03</span>
+        <h3 class="text-lg font-bold text-white mt-4">Sprint Execution</h3>
+        <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">Iterative test-driven code delivery with bi-weekly client demo environments.</p>
+      </div>
+
+      <div class="glass-card p-6 rounded-xl border-slate-800">
+        <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2 py-1 rounded">STAGE 04</span>
+        <h3 class="text-lg font-bold text-white mt-4">Deployment & Ops</h3>
+        <p class="text-slate-400 text-xs sm:text-sm mt-2 leading-relaxed">Production cutover, automated backup scheduling, telemetry setup, and team handover.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Project Cost Estimator -->
+  <section id="estimator" class="py-20 px-4 max-w-4xl mx-auto">
+    <div class="glass-panel p-6 sm:p-10 rounded-3xl border border-slate-800 shadow-2xl">
+      <div class="max-w-xl">
+        <span class="text-cyan-400 font-semibold text-xs tracking-widest uppercase">Instant Budgeting</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Project Scope Estimator</h2>
+        <p class="text-slate-400 text-xs sm:text-sm mt-2">Receive automated delivery and budget estimates calculated directly through FastAPI backend algorithms.</p>
+      </div>
+
+      <form id="estimator-form" class="mt-8 space-y-6">
         <div>
-          <label class="block text-sm mb-2 text-slate-300">Project Type</label>
-          <select id="project-type" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm focus:outline-cyan-500 text-white">
-            <option value="Web App">Web Application</option>
+          <label class="block text-xs uppercase tracking-wider text-slate-300 mb-2 font-semibold">Architecture / Platform Type</label>
+          <select id="project-type" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl p-3.5 text-sm focus:border-cyan-400 text-white outline-none">
+            <option value="Web App">Web Application (FastAPI / SPA)</option>
             <option value="Mobile App">Mobile Application</option>
-            <option value="Enterprise Architecture">Enterprise System</option>
+            <option value="Enterprise Architecture">Enterprise System (Microservices & ERP)</option>
           </select>
         </div>
 
         <div>
-          <label class="block text-sm mb-2 text-slate-300">Estimated Pages/Views: <span id="pages-display" class="text-cyan-400 font-bold">5</span></label>
-          <input type="range" id="pages-count" min="1" max="25" value="5" class="w-full accent-cyan-400" />
+          <div class="flex justify-between items-center mb-2">
+            <label class="text-xs uppercase tracking-wider text-slate-300 font-semibold">Scope (Pages / Micro-Views)</label>
+            <span id="pages-display" class="text-cyan-400 font-bold text-sm bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">5</span>
+          </div>
+          <input type="range" id="pages-count" min="1" max="25" value="5" class="w-full accent-cyan-400 cursor-pointer" />
         </div>
 
-        <div class="flex gap-6 text-sm text-slate-300">
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" id="auth-needed" class="accent-cyan-400" checked /> User Auth & Roles
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-slate-300">
+          <label class="flex items-center gap-3 p-3.5 rounded-xl border border-slate-800 hover:bg-slate-900/50 cursor-pointer transition">
+            <input type="checkbox" id="auth-needed" class="w-4 h-4 accent-cyan-400" checked />
+            <span class="text-xs font-medium">Role-Based Auth (JWT / OAuth)</span>
           </label>
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" id="payment-needed" class="accent-cyan-400" /> Payment Gateway
+          <label class="flex items-center gap-3 p-3.5 rounded-xl border border-slate-800 hover:bg-slate-900/50 cursor-pointer transition">
+            <input type="checkbox" id="payment-needed" class="w-4 h-4 accent-cyan-400" />
+            <span class="text-xs font-medium">Payment Integration</span>
           </label>
         </div>
 
-        <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-lg transition">
-          Calculate Estimate
+        <button type="submit" class="w-full py-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">
+          Calculate Live Estimate
         </button>
       </form>
 
-      <div id="estimate-result" class="hidden mt-6 p-4 rounded-lg bg-cyan-950/40 border border-cyan-600/40">
-        <p class="text-sm text-slate-300">Estimated Cost: <span id="cost-value" class="text-cyan-400 text-xl font-bold"></span></p>
-        <p class="text-sm text-slate-400">Estimated Timeline: <span id="timeline-value" class="text-slate-200 font-semibold"></span></p>
+      <div id="estimate-result" class="hidden mt-8 p-6 rounded-2xl bg-cyan-950/30 border border-cyan-500/30 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div>
+          <p class="text-xs uppercase tracking-wider text-slate-400">Estimated Cost Range</p>
+          <p id="cost-value" class="text-2xl sm:text-3xl font-black text-cyan-400 mt-1"></p>
+        </div>
+        <div class="sm:text-right">
+          <p class="text-xs uppercase tracking-wider text-slate-400">Delivery Velocity</p>
+          <p id="timeline-value" class="text-xl font-bold text-white mt-1"></p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Contact Section -->
-  <section id="contact" class="py-16 px-8 max-w-3xl mx-auto">
-    <div class="glass-card p-8 rounded-2xl">
-      <h2 class="text-2xl font-bold mb-2 text-cyan-400">Get In Touch</h2>
-      <p class="text-slate-400 text-sm mb-6">Have a project in mind? Reach out and we'll reply shortly.</p>
+  <section id="contact" class="py-20 px-4 max-w-4xl mx-auto">
+    <div class="glass-panel p-6 sm:p-10 rounded-3xl border border-slate-800 shadow-2xl">
+      <div class="max-w-xl">
+        <span class="text-cyan-400 font-semibold text-xs tracking-widest uppercase">Start an Engagement</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Direct Engineering Contact</h2>
+        <p class="text-slate-400 text-xs sm:text-sm mt-2">Inquiries are logged directly to the admin lead table.</p>
+      </div>
 
-      <form id="contact-form" class="space-y-4">
-        <div>
-          <label class="block text-sm mb-1 text-slate-300">Your Name</label>
-          <input type="text" id="contact-name" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm focus:outline-cyan-500 text-white" placeholder="Rahul Sharma" />
+      <form id="contact-form" class="mt-8 space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Your Full Name</label>
+            <input type="text" id="contact-name" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-sm focus:border-cyan-400 text-white outline-none" placeholder="e.g. Anand Varma" />
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Work Email</label>
+            <input type="email" id="contact-email" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-sm focus:border-cyan-400 text-white outline-none" placeholder="name@company.com" />
+          </div>
         </div>
 
         <div>
-          <label class="block text-sm mb-1 text-slate-300">Email Address</label>
-          <input type="email" id="contact-email" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm focus:outline-cyan-500 text-white" placeholder="name@company.com" />
-        </div>
-
-        <div>
-          <label class="block text-sm mb-1 text-slate-300">Service Interested In</label>
-          <select id="contact-service" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm focus:outline-cyan-500 text-white">
+          <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Required Practice Area</label>
+          <select id="contact-service" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-sm focus:border-cyan-400 text-white outline-none">
             <option value="Full-Stack Web Development">Full-Stack Web Development</option>
             <option value="Cloud & DevOps Architecture">Cloud & DevOps Architecture</option>
             <option value="Corporate IT Training">Corporate IT Training</option>
@@ -115,59 +254,94 @@
         </div>
 
         <div>
-          <label class="block text-sm mb-1 text-slate-300">Message</label>
-          <textarea id="contact-message" rows="4" required class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-sm focus:outline-cyan-500 text-white" placeholder="Brief project details..."></textarea>
+          <label class="block text-xs uppercase tracking-wider text-slate-300 font-semibold mb-1">Scope Details</label>
+          <textarea id="contact-message" rows="4" required class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3.5 text-sm focus:border-cyan-400 text-white outline-none" placeholder="Describe the problem statement or architectural requirements..."></textarea>
         </div>
 
-        <button type="submit" id="contact-submit-btn" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-lg transition">
-          Send Message
+        <button type="submit" id="contact-submit-btn" class="w-full py-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition">
+          Submit Engineering Inquiry
         </button>
       </form>
 
-      <div id="contact-alert" class="hidden mt-4 p-3 rounded-lg text-sm text-center"></div>
+      <div id="contact-alert" class="hidden mt-6 p-4 rounded-xl text-sm text-center"></div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="py-8 text-center text-xs text-slate-600 border-t border-slate-900">
-    © 2026 Nexora Tech Solutions. All rights reserved.
+  <footer class="py-10 border-t border-slate-900 bg-slate-950">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <p>© 2026 Nexora Tech Solutions. High-Performance Digital Systems.</p>
+      <div class="flex space-x-6">
+        <a href="#services" class="hover:text-cyan-400 transition">Services</a>
+        <a href="#process" class="hover:text-cyan-400 transition">Workflow</a>
+        <a href="#estimator" class="hover:text-cyan-400 transition">Estimator</a>
+      </div>
+    </div>
   </footer>
 
   <script>
-    // Unified API Base URL (Live Render Backend)
+    // Unified API Base URL pointing to Render
     const API_BASE_URL = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
       ? "http://127.0.0.1:8000"
       : "https://nexora-backend-4ijr.onrender.com";
 
-    // 1. Fetch Dynamic Services
+    // 1. Mobile Menu Toggle
+    const mobileBtn = document.getElementById('mobile-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const hamburgerIcon = document.getElementById('hamburger-icon');
+    const closeIcon = document.getElementById('close-icon');
+
+    mobileBtn.addEventListener('click', () => {
+      const isHidden = mobileMenu.classList.toggle('hidden');
+      hamburgerIcon.classList.toggle('hidden', !isHidden);
+      closeIcon.classList.toggle('hidden', isHidden);
+    });
+
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        hamburgerIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+      });
+    });
+
+    // 2. Fetch Dynamic Services
     async function loadServices() {
       try {
         const res = await fetch(`${API_BASE_URL}/api/services`);
-        if (!res.ok) throw new Error("Network response was not ok");
+        if (!res.ok) throw new Error("Service catalog unreachable");
         const services = await res.json();
         const container = document.getElementById('services-container');
+        
         container.innerHTML = services.map(s => `
-          <div class="glass-card p-6 rounded-xl hover:border-cyan-500/40 transition">
-            <h3 class="text-xl font-semibold text-white mb-2">${s.title}</h3>
-            <p class="text-sm text-slate-400 leading-relaxed">${s.desc}</p>
+          <div class="glass-card p-6 sm:p-8 rounded-2xl hover:border-cyan-500/40 transition group">
+            <div class="w-10 h-10 rounded-xl bg-cyan-950/60 border border-cyan-800/60 flex items-center justify-center text-cyan-400 mb-4 group-hover:scale-110 transition-transform">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">${s.title}</h3>
+            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">${s.desc}</p>
           </div>
         `).join('');
       } catch (err) {
-        console.error("Error fetching services:", err);
+        console.error("Services fetch error:", err);
         document.getElementById('services-container').innerHTML = `
-          <p class="text-rose-400 text-center col-span-3 text-sm">Unable to connect to service catalog.</p>
+          <div class="p-6 rounded-xl border border-rose-900/50 bg-rose-950/20 text-rose-400 text-center col-span-full text-sm">
+            Failed to connect to backend catalog.
+          </div>
         `;
       }
     }
 
-    // 2. Slider Display
+    // 3. Slider Display
     const pagesInput = document.getElementById('pages-count');
     const pagesDisplay = document.getElementById('pages-display');
     pagesInput.addEventListener('input', (e) => {
       pagesDisplay.textContent = e.target.value;
     });
 
-    // 3. Estimator Submit
+    // 4. Estimator Handler
     document.getElementById('estimator-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const payload = {
@@ -185,20 +359,20 @@
         });
         const data = await res.json();
         document.getElementById('cost-value').textContent = '₹' + data.estimated_price_inr.toLocaleString('en-IN');
-        document.getElementById('timeline-value').textContent = data.delivery_timeline_weeks + ' Weeks';
+        document.getElementById('timeline-value').textContent = data.delivery_timeline_weeks + ' Weeks Target';
         document.getElementById('estimate-result').classList.remove('hidden');
       } catch (err) {
         console.error("Estimator error:", err);
       }
     });
 
-    // 4. Contact Form Submit
+    // 5. Contact Form Handler
     document.getElementById('contact-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('contact-submit-btn');
       const alertBox = document.getElementById('contact-alert');
       btn.disabled = true;
-      btn.textContent = 'Sending...';
+      btn.textContent = 'Transmitting Lead...';
 
       const payload = {
         name: document.getElementById('contact-name').value,
@@ -214,20 +388,20 @@
           body: JSON.stringify(payload)
         });
         
-        if (!res.ok) throw new Error("Failed to submit inquiry");
+        if (!res.ok) throw new Error("Server submission error");
         const result = await res.json();
         
-        alertBox.className = 'mt-4 p-3 rounded-lg text-sm text-center bg-emerald-950/60 text-emerald-400 border border-emerald-600/40';
+        alertBox.className = 'mt-6 p-4 rounded-xl text-sm text-center bg-emerald-950/70 text-emerald-400 border border-emerald-600/40';
         alertBox.textContent = result.message;
         alertBox.classList.remove('hidden');
         document.getElementById('contact-form').reset();
       } catch (err) {
-        alertBox.className = 'mt-4 p-3 rounded-lg text-sm text-center bg-rose-950/60 text-rose-400 border border-rose-600/40';
-        alertBox.textContent = 'Failed to submit form. Backend service might be waking up; please retry.';
+        alertBox.className = 'mt-6 p-4 rounded-xl text-sm text-center bg-rose-950/70 text-rose-400 border border-rose-600/40';
+        alertBox.textContent = 'Submission failure. Backend may be spinning up; please retry shortly.';
         alertBox.classList.remove('hidden');
       } finally {
         btn.disabled = false;
-        btn.textContent = 'Send Message';
+        btn.textContent = 'Submit Engineering Inquiry';
       }
     });
 
